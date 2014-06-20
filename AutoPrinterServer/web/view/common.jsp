@@ -11,6 +11,7 @@
 <script type="text/javascript" src="<%=root%>/resources/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="<%=root%>/resources/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="<%=root%>/resources/js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="<%=root%>/resources/json2.js"></script>
 <!-- 引入时间选择器 -->
 <script type="text/javascript"  src="<%=root%>/resources/js/JTimer_2.0.js"></script>
 

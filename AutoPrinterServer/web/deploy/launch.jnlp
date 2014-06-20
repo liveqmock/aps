@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="http://localhost:8084/aps/deploy" href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>单据模型工具</title>
+        <vendor>woderchen@163.com</vendor>
+        <homepage href="www.oracle.com"/>
+        <description>利用本工具可以很方便的建立票据的模型。</description>
+        <description kind="short">单据模型工具</description>
+    <icon href="flash_blue.png" kind="splash"/>
+<icon href="64x64bank.png" kind="default"/>
+<offline-allowed/>
+</information>
+    <update check="background"/>
+    <security>
+<all-permissions/>
+</security>
+    <resources>
+        <j2se java-vm-args="-Ddebug -Dmode=S -Dserver=127.0.0.1 -Dport=8084 -Dappid=aps/service/ -Dbranch=mc" version="1.6+"/>
+		  <property name="javax.net.debug" value="true"/>
+        <jar href="AutoPrinter.jar" main="true"/>
+    <jar href="lib/beansbinding-1.2.1.jar"/>
+<jar href="lib/commons-io-2.0.jar"/>
+<jar href="lib/commons-net-2.2.jar"/>
+<jar href="lib/httpclient-4.3.1.jar"/>
+<jar href="lib/httpclient-cache-4.3.1.jar"/>
+<jar href="lib/httpcore-4.3.jar"/>
+<jar href="lib/httpmime-4.3.1.jar"/>
+<jar href="lib/jackson-annotations-2.2.3.jar"/>
+<jar href="lib/jackson-core-2.2.3.jar"/>
+<jar href="lib/jackson-databind-2.2.3.jar"/>
+<jar href="lib/log4j-1.2.17.jar"/>
+<jar href="lib/slf4j-api-1.7.7.jar"/>
+<jar href="lib/slf4j-log4j12-1.7.7.jar"/>
+<jar href="lib/org-apache-commons-logging.jar"/>
+<jar href="lib/cglib-2.2.jar"/>
+<jar href="lib/spring-aop-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-aspects-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-beans-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-build-src-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-context-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-context-support-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-core-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-expression-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-instrument-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-instrument-tomcat-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-jdbc-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-jms-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-orm-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-oxm-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-struts-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-test-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-tx-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-web-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-webmvc-3.2.3.RELEASE.jar"/>
+<jar href="lib/spring-webmvc-portlet-3.2.3.RELEASE.jar"/>
+<jar href="lib/appframework-1.0.3.jar"/>
+<jar href="lib/swing-worker-1.1.jar"/>
+<jar href="lib/swing-layout-1.0.4.jar"/>
+</resources>
+    <application-desc main-class="com.mc.printer.model.AutoPrinterApp">
+    </application-desc>
+</jnlp>

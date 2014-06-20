@@ -143,5 +143,11 @@ public class AdminController {
     public ModelAndView e() {
         return new ModelAndView("tool/list");
     }
+    
+        @RequestMapping(method = RequestMethod.GET, value = "/open")
+    public ModelAndView f() {
+        return new ModelAndView("open");
+    }
+
 
 }

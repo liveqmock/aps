@@ -78,7 +78,7 @@
                                 </tr>
                             </table>
                             <div id="dlg-buttons">
-                                <input type="button" name="提交" value="提交" onclick="submitForm()"/>
+                                <input type="button" name="提交" value="提交" onClick="submitForm()"/>
                                 <!--                                <a href="#" id="btn" class="easyui-linkbutton" iconCls="icon-ok" onclick="submitForm()">提交</a>-->
                             </div>
                         </form>
@@ -132,12 +132,12 @@
                     type: "POST",
                     url: "<%=root%>/service/init",
                     data: JSON.stringify(params),
-                    async: true,
                     dataType: 'json',
                     success: successFun,
                     error: errorFun,
                     contentType: "application/json"
                 });
+ 
             }
         </script>
     </body>
