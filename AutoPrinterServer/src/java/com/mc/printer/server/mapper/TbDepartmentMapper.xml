@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mc.printer.server.mapper.TbDepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.mc.printer.server.entity.TbDepartment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="depname" property="depname" jdbcType="VARCHAR" />
+    <result column="deplevel" property="deplevel" jdbcType="BIGINT" />
+    <result column="depfather" property="depfather" jdbcType="BIGINT" />
+    <result column="deppresentid" property="deppresentid" jdbcType="BIGINT" />
+    <result column="descms" property="descms" jdbcType="VARCHAR" />
+    <result column="ext1" property="ext1" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, depname, deplevel, depfather, deppresentid, descms, ext1, flag
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mc.printer.server.entity.TbDepartmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.tb_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.tb_department
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.tb_department
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mc.printer.server.entity.TbDepartmentExample" >
+    delete from public.tb_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mc.printer.server.entity.TbDepartment" >
+    insert into public.tb_department (id, depname, deplevel, 
+      depfather, deppresentid, descms, 
+      ext1, flag)
+    values (#{id,jdbcType=BIGINT}, #{depname,jdbcType=VARCHAR}, #{deplevel,jdbcType=BIGINT}, 
+      #{depfather,jdbcType=BIGINT}, #{deppresentid,jdbcType=BIGINT}, #{descms,jdbcType=VARCHAR}, 
+      #{ext1,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mc.printer.server.entity.TbDepartment" >
+    insert into public.tb_department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="depname != null" >
+        depname,
+      </if>
+      <if test="deplevel != null" >
+        deplevel,
+      </if>
+      <if test="depfather != null" >
+        depfather,
+      </if>
+      <if test="deppresentid != null" >
+        deppresentid,
+      </if>
+      <if test="descms != null" >
+        descms,
+      </if>
+      <if test="ext1 != null" >
+        ext1,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="depname != null" >
+        #{depname,jdbcType=VARCHAR},
+      </if>
+      <if test="deplevel != null" >
+        #{deplevel,jdbcType=BIGINT},
+      </if>
+      <if test="depfather != null" >
+        #{depfather,jdbcType=BIGINT},
+      </if>
+      <if test="deppresentid != null" >
+        #{deppresentid,jdbcType=BIGINT},
+      </if>
+      <if test="descms != null" >
+        #{descms,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mc.printer.server.entity.TbDepartmentExample" resultType="java.lang.Integer" >
+    select count(*) from public.tb_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update public.tb_department
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.depname != null" >
+        depname = #{record.depname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deplevel != null" >
+        deplevel = #{record.deplevel,jdbcType=BIGINT},
+      </if>
+      <if test="record.depfather != null" >
+        depfather = #{record.depfather,jdbcType=BIGINT},
+      </if>
+      <if test="record.deppresentid != null" >
+        deppresentid = #{record.deppresentid,jdbcType=BIGINT},
+      </if>
+      <if test="record.descms != null" >
+        descms = #{record.descms,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext1 != null" >
+        ext1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flag != null" >
+        flag = #{record.flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update public.tb_department
+    set id = #{record.id,jdbcType=BIGINT},
+      depname = #{record.depname,jdbcType=VARCHAR},
+      deplevel = #{record.deplevel,jdbcType=BIGINT},
+      depfather = #{record.depfather,jdbcType=BIGINT},
+      deppresentid = #{record.deppresentid,jdbcType=BIGINT},
+      descms = #{record.descms,jdbcType=VARCHAR},
+      ext1 = #{record.ext1,jdbcType=VARCHAR},
+      flag = #{record.flag,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mc.printer.server.entity.TbDepartment" >
+    update public.tb_department
+    <set >
+      <if test="depname != null" >
+        depname = #{depname,jdbcType=VARCHAR},
+      </if>
+      <if test="deplevel != null" >
+        deplevel = #{deplevel,jdbcType=BIGINT},
+      </if>
+      <if test="depfather != null" >
+        depfather = #{depfather,jdbcType=BIGINT},
+      </if>
+      <if test="deppresentid != null" >
+        deppresentid = #{deppresentid,jdbcType=BIGINT},
+      </if>
+      <if test="descms != null" >
+        descms = #{descms,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        ext1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mc.printer.server.entity.TbDepartment" >
+    update public.tb_department
+    set depname = #{depname,jdbcType=VARCHAR},
+      deplevel = #{deplevel,jdbcType=BIGINT},
+      depfather = #{depfather,jdbcType=BIGINT},
+      deppresentid = #{deppresentid,jdbcType=BIGINT},
+      descms = #{descms,jdbcType=VARCHAR},
+      ext1 = #{ext1,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
