@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<jnlp codebase="http://localhost:8084/aps/deploy" href="client.jnlp" spec="1.0+">
+<jnlp codebase="https://localhost:8443/aps/deploy" href="client.jnlp" spec="1.0+">
     <information>
-        <title>单据模型工具</title>
+        <title>触屏自助填单系统</title>
         <vendor>woderchen@163.com</vendor>
         <homepage href="www.oracle.com"/>
-        <description>利用本工具可以很方便的建立票据的模型。</description>
-        <description kind="short">单据模型工具</description>
+        <description>触摸屏填单打印系统，可以在屏幕上完成单据写入，自助打印等功能.</description>
+        <description kind="short">触屏自助填单系统</description>
     <icon href="flash_blue.png" kind="splash"/>
 <icon href="64x64bank.png" kind="default"/>
 <offline-allowed/>
@@ -15,9 +15,9 @@
 <all-permissions/>
 </security>
     <resources>
-        <j2se java-vm-args="-Ddebug -Dmode=C -Dserver=127.0.0.1 -Dport=8084 -Dappid=aps/service/ -Dbranch=mc" version="1.6+"/>
+        <j2se java-vm-args="-Ddebug -Dmode=C -Dfull -Dserver=127.0.0.1 -Dport=8080 -Dappid=aps/service/ -Dbranch=mc" version="1.6+"/>
           <property name="javax.net.debug" value="true"/>       
-	   <jar href="AutoPrinter.jar" main="true"/>
+	   <jar href="lib/AutoPrinter.jar" main="true"/>
     <jar href="lib/beansbinding-1.2.1.jar"/>
 <jar href="lib/commons-io-2.0.jar"/>
 <jar href="lib/commons-net-2.2.jar"/>
