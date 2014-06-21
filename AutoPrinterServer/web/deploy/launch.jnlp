@@ -17,7 +17,7 @@
     <resources>
         <j2se java-vm-args="-Ddebug -Dmode=S" version="1.6+"/>
 		  <property name="javax.net.debug" value="true"/>
-        <jar href="lib/AutoPrinter.jar" main="true"/>
+        <jar href="AutoPrinter.jar" main="true"/>
     <jar href="lib/beansbinding-1.2.1.jar"/>
 <jar href="lib/commons-io-2.0.jar"/>
 <jar href="lib/commons-net-2.2.jar"/>
