@@ -42,7 +42,10 @@ public class AttathController {
             log.error(ex);
         }
         String filePath = "";
-        String path = request.getRealPath("/");
+        String path = System.getProperty("user.dir");
+        if (path.trim().equals("")) {
+            path = request.getRealPath("/");
+        }
         String uploadPath = Constants.UPLOAD_PATH;
 
         List<MultipartFile> files = request.getFiles("file");
@@ -92,11 +95,14 @@ public class AttathController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/deploy/delete/")
     public ModelAndView delete(@RequestParam String name, HttpServletRequest request) {
-        String path = request.getRealPath("/");
+        String path = System.getProperty("user.dir");
+        if (path.trim().equals("")) {
+            path = request.getRealPath("/");
+        }
         String uploadPath = Constants.UPLOAD_PATH;
         File uploadDir = new File(path + uploadPath);
-        log.debug("try to delete:"+name);
-        if (!name.trim().equals("")&&uploadDir.exists() && uploadDir.isDirectory()) {
+        log.debug("try to delete:" + name);
+        if (!name.trim().equals("") && uploadDir.exists() && uploadDir.isDirectory()) {
             File[] ls = uploadDir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
@@ -128,12 +134,15 @@ public class AttathController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/deploy")
     public ModelAndView checkfil(HttpServletRequest request) {
-        String path = request.getRealPath("/");
+        String path = System.getProperty("user.dir");
+        if (path.trim().equals("")) {
+            path = request.getRealPath("/");
+        }
         String uploadPath = Constants.UPLOAD_PATH;
 
         File uploadDir = new File(path + uploadPath);
         List<HashMap> files = new ArrayList();
-        
+
         if (uploadDir.exists() && uploadDir.isDirectory()) {
             File[] ls = uploadDir.listFiles(new FilenameFilter() {
                 @Override

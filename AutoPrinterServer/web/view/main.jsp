@@ -20,7 +20,7 @@
                 </tr>
             </tbody>
         </table>
-        &nbsp;&nbsp;&nbsp;&nbsp;<font FONT-FAMILY=微软雅黑; size="2">-<a href="<%=root%>">回到首页</a></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;<font FONT-FAMILY=微软雅黑; size="2">-<a href="<%=root%>/">回到首页</a></font>
         <table style="width: 100%" border="0" cellpadding="0"
                cellspacing="0">
             <tr>

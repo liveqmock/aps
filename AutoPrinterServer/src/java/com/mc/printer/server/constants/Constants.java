@@ -32,7 +32,7 @@ public class Constants {
     public final static int TOPPAGE_ISSUE = 4;
 
     /*upload path*/
-    public final static String UPLOAD_PATH = "/WEB-INF/ftp/res/home";
+    public final static String UPLOAD_PATH = "/warehouse/res/home";
 
     public final static String MODEL_SUFFIX = "mde";
     public final static String GUIDE_SUFFIX = "gde";

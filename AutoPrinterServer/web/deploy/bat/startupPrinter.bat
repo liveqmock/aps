@@ -8,10 +8,9 @@ set _RUNJAVA="%JRE_HOME%\bin\javaws"
 set  TITLE=autoprinter
 set _EXECJAVA=start "%TITLE%" %_RUNJAVA%
 rem  ****************please change to your real IP ,port, appid. *****************
-set _URL=https://127.0.0.1:8443/aps
+set _URL=https://127.0.0.1
 echo Using URL:              "%_URL%"
 
 %_EXECJAVA% %_URL%/deploy/client.jnlp
 
-pause
 :end
