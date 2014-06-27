@@ -1,0 +1,15 @@
+keytool -genkey -alias mc_127.0.0.1 -keyalg RSA -keysize 1024 -keypass zaq12wsx -validity 3650 -keystore mc.keystore -storepass zaq12wsx
+您的名字与姓氏是什么?
+  [Unknown]:  localhost
+您的组织单位名称是什么?
+  [Unknown]:  mc
+您的组织名称是什么?
+  [Unknown]:  mc
+您所在的城市或区域名称是什么?
+  [Unknown]:  chengdu
+您所在的省/市/自治区名称是什么?
+  [Unknown]:  sichuan
+该单位的双字母国家/地区代码是什么?
+  [Unknown]:  cn
+CN=localhost, OU=mc, O=mc, L=chengdu, ST=sichuan, C=cn是否正确?
+  [否]:  y

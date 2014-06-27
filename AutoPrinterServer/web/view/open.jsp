@@ -12,7 +12,7 @@
                cellpadding="0" cellspacing="0" width="100%">
             <tbody>
                 <tr>
-                    <td class="sun-lightblue">123</td>
+                    <td class="sun-lightblue"></td>
                 </tr>
                 <tr>
                     <td class="sun-darkblue">

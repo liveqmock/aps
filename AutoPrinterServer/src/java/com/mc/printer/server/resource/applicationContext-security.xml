@@ -7,12 +7,13 @@
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
+    <security:http pattern="/deploy" security="none" />
     <security:http pattern="/service/open" security="none" />
     <security:http pattern="/service/toppage" security="none" />
     <security:http pattern="/service/logout/clear" security="none" />
     <security:http auto-config="true" access-denied-page="/view/denied.jsp">
         <!-- intercept-url:拦截器,可以设定哪些路径需要哪些权限来访问. filters=none 不使用过滤,也可以理解为忽略 -->
-<!--        <security:intercept-url pattern="/service/**" access="ROLE_ADMIN,ROLE_BRANCH,ROLE_USER"  />-->
+        <!--        <security:intercept-url pattern="/service/**" access="ROLE_ADMIN,ROLE_BRANCH,ROLE_USER"  />-->
         <!-- <security:intercept-url pattern="/view/**" access="ROLE_ADMIN"  /> -->
         <security:intercept-url pattern="/service/admin/role" access="ROLE_ADMIN"  />
         <security:intercept-url pattern="/service/admin/dep" access="ROLE_ADMIN"  />
@@ -31,7 +32,7 @@
 
         <!-- login-page:默认指定的登录页面. authentication-failure-url:出错后跳转页面. default-target-url:成功登陆后跳转页面 -->
         <security:form-login login-page="/service/toppage"
-                                     authentication-failure-url="/service/toppage?type=1" default-target-url="/service/main"  always-use-default-target="true" username-parameter="j_username" password-parameter="j_password" login-processing-url="/j_spring_security_check"/>
+                             authentication-failure-url="/service/toppage?type=1" default-target-url="/service/main"  always-use-default-target="true" username-parameter="j_username" password-parameter="j_password" login-processing-url="/j_spring_security_check"/>
         <!-- logout-success-url:成功注销后跳转到的页面; -->
         <security:logout logout-success-url="/service/toppage" />
         <security:http-basic />
@@ -53,7 +54,7 @@
     </bean>
 
     <bean id="saltSource"
-              class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+          class="org.springframework.security.authentication.dao.ReflectionSaltSource">
         <property name="userPropertyToUse" value="getUsername" />
     </bean>
 
@@ -62,6 +63,6 @@
         id="passwordEncoder" />
 
     <bean class="com.mc.printer.server.service.emp.LoginUserDetailsServiceImpl"
-              id="userDetailsService" />
+          id="userDetailsService" />
 
 </beans>
