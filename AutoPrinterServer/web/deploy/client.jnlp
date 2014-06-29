@@ -65,6 +65,7 @@
         <jar href="lib/jacob.jar"/>
         <jar href="lib/appframework-1.0.3.jar"/>
         <jar href="lib/swing-worker-1.1.jar"/>
+        <jar href="lib/VideoPlayer.jar"/>
     </resources>
     <application-desc main-class="com.mc.printer.model.AutoPrinterApp">
     </application-desc>
