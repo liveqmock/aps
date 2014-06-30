@@ -39,7 +39,7 @@ h2 {
 
 /* @group Button */
 .jvdl0 a.jvdla0, .jvdl0x1, .jvdl0x2 {
-	background: url('/aps/resources/img/jv0dl_a.png') no-repeat bottom left;
+	background: url('/resources/img/jv0dl_a.png') no-repeat bottom left;
 	display: block;
 	overflow: hidden;
 	margin: 0 auto;
