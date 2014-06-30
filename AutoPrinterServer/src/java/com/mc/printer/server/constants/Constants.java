@@ -34,9 +34,14 @@ public class Constants {
     /*upload path*/
     public final static String UPLOAD_PATH = "/warehouse/res/home";
 
+    /*upload path*/
+    public final static String UPLOAD_VIDEO_PATH = "/warehouse/res/home/video";
+
     public final static String MODEL_SUFFIX = "mde";
     public final static String GUIDE_SUFFIX = "gde";
-    
+
+    public final static String VIDEO_SUFFIX = "flv";
+
     /*这个时间一般设置的为客户端的2倍*/
     public final static long CHECKIN_LOOP_SEC = 360;
 

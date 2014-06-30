@@ -23,7 +23,8 @@
         <property name="jnlp.server" value="127.0.0.1"/>  
         <property name="jnlp.port" value="8089"/>  
         <property name="jnlp.appid" value="service/"/>  
-        <property name="jnlp.branch" value="mc"/>  		
+        <property name="jnlp.branch" value="mc"/> 
+        <property name="jnlp.jnlp.idle" value="60"/> 		
         <jar href="lib/AutoPrinter.jar" main="true"/>
         <jar href="lib/beansbinding-1.2.1.jar"/>
         <jar href="lib/commons-io-2.0.jar"/>
