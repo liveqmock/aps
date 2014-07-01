@@ -9,6 +9,7 @@
 
     <security:http pattern="/deploy" security="none" />
     <security:http pattern="/service/open" security="none" />
+    <security:http pattern="/service/init" security="none" />
     <security:http pattern="/service/toppage" security="none" />
     <security:http pattern="/service/logout/clear" security="none" />
     <security:http auto-config="true" access-denied-page="/view/denied.jsp">
