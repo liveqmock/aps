@@ -9,7 +9,7 @@
     <result column="ext1" property="ext1" jdbcType="VARCHAR" />
     <result column="ext2" property="ext2" jdbcType="VARCHAR" />
     <result column="ext3" property="ext3" jdbcType="VARCHAR" />
-    <result column="submitdate" property="submitdate" jdbcType="DATE" />
+    <result column="submitdate" property="submitdate" jdbcType="TIMESTAMP" />
     <result column="branchid" property="branchid" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -113,7 +113,7 @@
       )
     values (#{id,jdbcType=BIGINT}, #{key,jdbcType=VARCHAR}, #{elementname,jdbcType=VARCHAR}, 
       #{value,jdbcType=VARCHAR}, #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, 
-      #{ext3,jdbcType=VARCHAR}, #{submitdate,jdbcType=DATE}, #{branchid,jdbcType=BIGINT}
+      #{ext3,jdbcType=VARCHAR}, #{submitdate,jdbcType=TIMESTAMP}, #{branchid,jdbcType=BIGINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.mc.printer.server.entity.TbSavedata" >
@@ -170,7 +170,7 @@
         #{ext3,jdbcType=VARCHAR},
       </if>
       <if test="submitdate != null" >
-        #{submitdate,jdbcType=DATE},
+        #{submitdate,jdbcType=TIMESTAMP},
       </if>
       <if test="branchid != null" >
         #{branchid,jdbcType=BIGINT},
@@ -208,7 +208,7 @@
         ext3 = #{record.ext3,jdbcType=VARCHAR},
       </if>
       <if test="record.submitdate != null" >
-        submitdate = #{record.submitdate,jdbcType=DATE},
+        submitdate = #{record.submitdate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.branchid != null" >
         branchid = #{record.branchid,jdbcType=BIGINT},
@@ -227,7 +227,7 @@
       ext1 = #{record.ext1,jdbcType=VARCHAR},
       ext2 = #{record.ext2,jdbcType=VARCHAR},
       ext3 = #{record.ext3,jdbcType=VARCHAR},
-      submitdate = #{record.submitdate,jdbcType=DATE},
+      submitdate = #{record.submitdate,jdbcType=TIMESTAMP},
       branchid = #{record.branchid,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -255,7 +255,7 @@
         ext3 = #{ext3,jdbcType=VARCHAR},
       </if>
       <if test="submitdate != null" >
-        submitdate = #{submitdate,jdbcType=DATE},
+        submitdate = #{submitdate,jdbcType=TIMESTAMP},
       </if>
       <if test="branchid != null" >
         branchid = #{branchid,jdbcType=BIGINT},
@@ -271,7 +271,7 @@
       ext1 = #{ext1,jdbcType=VARCHAR},
       ext2 = #{ext2,jdbcType=VARCHAR},
       ext3 = #{ext3,jdbcType=VARCHAR},
-      submitdate = #{submitdate,jdbcType=DATE},
+      submitdate = #{submitdate,jdbcType=TIMESTAMP},
       branchid = #{branchid,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

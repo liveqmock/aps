@@ -2,7 +2,6 @@ package com.mc.printer.server.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class TbSavedataExample {
@@ -124,32 +123,6 @@ public class TbSavedataExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -643,52 +616,52 @@ public class TbSavedataExample {
         }
 
         public Criteria andSubmitdateEqualTo(Date value) {
-            addCriterionForJDBCDate("submitdate =", value, "submitdate");
+            addCriterion("submitdate =", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateNotEqualTo(Date value) {
-            addCriterionForJDBCDate("submitdate <>", value, "submitdate");
+            addCriterion("submitdate <>", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateGreaterThan(Date value) {
-            addCriterionForJDBCDate("submitdate >", value, "submitdate");
+            addCriterion("submitdate >", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("submitdate >=", value, "submitdate");
+            addCriterion("submitdate >=", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateLessThan(Date value) {
-            addCriterionForJDBCDate("submitdate <", value, "submitdate");
+            addCriterion("submitdate <", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("submitdate <=", value, "submitdate");
+            addCriterion("submitdate <=", value, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateIn(List<Date> values) {
-            addCriterionForJDBCDate("submitdate in", values, "submitdate");
+            addCriterion("submitdate in", values, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateNotIn(List<Date> values) {
-            addCriterionForJDBCDate("submitdate not in", values, "submitdate");
+            addCriterion("submitdate not in", values, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("submitdate between", value1, value2, "submitdate");
+            addCriterion("submitdate between", value1, value2, "submitdate");
             return (Criteria) this;
         }
 
         public Criteria andSubmitdateNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("submitdate not between", value1, value2, "submitdate");
+            addCriterion("submitdate not between", value1, value2, "submitdate");
             return (Criteria) this;
         }
 

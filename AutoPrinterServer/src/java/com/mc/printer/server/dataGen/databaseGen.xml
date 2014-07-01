@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">  
   
 <generatorConfiguration>  
-    <classPathEntry location="D:\workspace\NetbeanWorkSpace\AutoPrinterServer\lib\postgresql-9.2-1002.jdbc4.jar" />  
+    <classPathEntry location="D:\workspace\NetbeanWorkSpace\git\aps\AutoPrinterServer\lib\postgresql-9.2-1002.jdbc4.jar" />  
   
     <context id="DB2Tables" targetRuntime="MyBatis3">  
         <plugin type="com.mc.printer.server.dataGen.GenData" />
@@ -22,19 +22,19 @@
         </javaTypeResolver>  
   
         <javaModelGenerator targetPackage="com.mc.printer.server.entity"  
-                            targetProject="D:\workspace\NetbeanWorkSpace\AutoPrinterServer\src\java">  
+                            targetProject="D:\workspace\NetbeanWorkSpace\git\aps\AutoPrinterServer\src\java">  
             <property name="enableSubPackages" value="false" />  
             <property name="trimStrings" value="true" />  
         </javaModelGenerator>  
   
         <sqlMapGenerator targetPackage="com.mc.printer.server.mapper"  
-                         targetProject="D:\workspace\NetbeanWorkSpace\AutoPrinterServer\src\java">  
+                         targetProject="D:\workspace\NetbeanWorkSpace\git\aps\AutoPrinterServer\src\java">  
             <property name="enableSubPackages" value="false" />  
         </sqlMapGenerator>  
  
         <javaClientGenerator type="XMLMAPPER"  
                              targetPackage="com.mc.printer.server.mapper" 
-                             targetProject="D:\workspace\NetbeanWorkSpace\AutoPrinterServer\src\java">  
+                             targetProject="D:\workspace\NetbeanWorkSpace\git\aps\AutoPrinterServer\src\java">  
             <property name="enableSubPackages" value="false" />  
         </javaClientGenerator>
   
@@ -42,11 +42,11 @@
 <!--        <table schema="public" tableName="tb_pkgenerator" domainObjectName="TbPkgenerator">  
             <generatedKey column="id" sqlStatement="SELECT currval('tb_pkgenerator_id_seq')" identity="true" />   
         </table> -->
-        <table schema="public" tableName="tb_branch" domainObjectName="TbBranch"/>  
+<!--        <table schema="public" tableName="tb_branch" domainObjectName="TbBranch"/>  -->
 <!--        <table schema="public" tableName="tb_department" domainObjectName="TbDepartment"/> 
         <table schema="public" tableName="tb_emp" domainObjectName="TbEmployee"/>  
-        <table schema="public" tableName="tb_role" domainObjectName="TbRole"/> 
-        <table schema="public" tableName="tb_savedata" domainObjectName="TbSavedata"/> -->
+        <table schema="public" tableName="tb_role" domainObjectName="TbRole"/> -->
+        <table schema="public" tableName="tb_savedata" domainObjectName="TbSavedata"/> 
     </context>  
     
     
