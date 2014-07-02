@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<jnlp codebase="https://127.0.0.1/deploy/" href="client.jnlp" spec="1.0+">
+<jnlp codebase="https://127.0.0.1:9443/deploy/" href="client.jnlp" spec="1.0+">
     <information>
         <title>触屏自助填单系统</title>
         <vendor>MC</vendor>
