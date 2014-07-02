@@ -26,7 +26,7 @@
 
         <div style="margin:20px 0;"></div>
         <div class="jvdl0 jvdl0v0">
-            <a href="<%=root%>/deploy/AutoPrinterClient.zip" class="jvdla0">
+            <a href="<%=root%>/deploy/AutoPrinter.zip" class="jvdla0">
                 <div class="jvdl0x1"></div>
                 <span>
                     下载自助填单系统
@@ -43,7 +43,7 @@
         </div>
         <div align="center">
             <div style="width:600px;height:400px" align="left">
-                <p>推荐您使用Chrome, Firefox, Opera以达到更好的浏览效果.</p>
+                
             </div>
         </div>
     </body>

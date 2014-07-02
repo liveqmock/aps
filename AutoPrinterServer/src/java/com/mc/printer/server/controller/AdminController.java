@@ -4,15 +4,20 @@
 package com.mc.printer.server.controller;
 
 import com.mc.printer.server.constants.Constants;
+import com.mc.printer.server.entity.TbBranch;
+import com.mc.printer.server.entity.child.DataSearchEntity;
+import com.mc.printer.server.entity.child.DataSearchResult;
 import com.mc.printer.server.entity.child.InitEntity;
+import com.mc.printer.server.entity.child.SavedDataEntity;
 import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.entity.common.LoginUserDetails;
 import com.mc.printer.server.service.admin.AdminServiceIF;
 import com.mc.printer.server.service.common.CommServiceIF;
+import com.mc.printer.server.service.saveddata.DataServiceIF;
+import com.mc.printer.server.utils.DateHelper;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -57,6 +62,9 @@ public class AdminController {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
     }
+
+    @Resource
+    private DataServiceIF dataSearchService;
 
     /**
      * 这里很特殊，是整个软件的toppage。
@@ -119,6 +127,53 @@ public class AdminController {
         return new ModelAndView("toppage", "first", first);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/admin/search/filter")
+    public ModelAndView findAll(HttpServletRequest request) {
+        log.debug("findAll.");
+        CommFindEntity<DataSearchResult> data = null;
+        try {
+            String danjuname = request.getParameter("danjuName");
+            String key = request.getParameter("key");
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            String branch = request.getParameter("branch");
+
+            DataSearchEntity bean = new DataSearchEntity();
+            if (danjuname != null && !danjuname.equals("")) {
+                bean.setDanjuName(danjuname);
+            }
+            if (startDate != null && !startDate.equals("")) {
+                bean.setStartDate(DateHelper.getStringtoDate(startDate, "yyyy-MM-dd"));
+            }
+            if (endDate != null && !endDate.equals("")) {
+                bean.setEndDate(DateHelper.getStringtoDate(endDate, "yyyy-MM-dd"));
+            }
+            if (branch != null && !branch.equals("")) {
+                try {
+                    bean.setBranchid(Long.valueOf(branch));
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+            if (key != null && !key.equals("")) {
+                bean.setKey(key);
+            }
+
+            data = dataSearchService.findAllCondition(bean);
+            if (branch != null && !branch.equals("") && data != null && data.getResult() != null && data.getResult().size() > 0) {
+                TbBranch branchBean = new TbBranch();
+                DataSearchResult result = data.getResult().get(0);
+                branchBean.setName(result.getBranchName());
+                bean.setBranch(branchBean);
+            }
+            request.setAttribute("condition", bean);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ModelAndView("search/list", "data", data);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/admin/user")
     public ModelAndView a() {
         return new ModelAndView("emp/list");
@@ -143,11 +198,15 @@ public class AdminController {
     public ModelAndView e() {
         return new ModelAndView("tool/list");
     }
-    
-        @RequestMapping(method = RequestMethod.GET, value = "/open")
+
+    @RequestMapping(method = RequestMethod.GET, value = "/open")
     public ModelAndView f() {
         return new ModelAndView("open");
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/admin/search")
+    public ModelAndView g() {
+        return new ModelAndView("search/form");
+    }
 
 }

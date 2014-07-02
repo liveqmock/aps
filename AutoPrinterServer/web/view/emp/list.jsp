@@ -9,7 +9,7 @@
         <p>内部员工增加，修改，删除。</p>
         <div style="margin:20px 0;"></div>
         <table class="easyui-datagrid" title="用户管理" id="tt" style="width:700px;height:400px"
-               data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/emp/',method:'get',toolbar:toolbar">
+               data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/emp/',method:'get',toolbar:'#tb'">
             <thead>
                 <tr>
                     <th data-options="field:'id',width:80">ID</th>
@@ -20,6 +20,13 @@
                 </tr>
             </thead>
         </table>
+        <div id="tb" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addOne()">增加</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="updateOne()">更新</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteObj()">删除</a>
+            </div>
+        </div>
         <script type="text/javascript">
 
             function formatRole(value) {
@@ -28,6 +35,18 @@
                 }
             }
             ;
+
+            function addOne() {
+                window.location = '<%=root%>/view/emp/add.jsp';
+            }
+
+            function updateOne() {
+                var row = $('#tt').datagrid('getSelected');
+                if (row) {
+                    window.location = '<%=root%>/view/emp/edit.jsp?id=' + row.id;
+                }
+            }
+
 
             function formatDep(value) {
                 if (value) {

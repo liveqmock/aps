@@ -12,7 +12,7 @@ public class Constants {
 
     public static String CONFIG_JNDI = "jndiName";
 
-    public static String VERSION = "14.0620";
+    public static String VERSION = "14.0701";
 
     public final static int FLAG_STATUS_DELETE = 1;
 
@@ -41,6 +41,8 @@ public class Constants {
     public final static String GUIDE_SUFFIX = "gde";
 
     public final static String VIDEO_SUFFIX = "flv";
+    
+    public final static String KEY_SPLIT = "\\$";
 
     /*这个时间一般设置的为客户端的2倍*/
     public final static long CHECKIN_LOOP_SEC = 360;

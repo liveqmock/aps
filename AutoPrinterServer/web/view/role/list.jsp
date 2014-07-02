@@ -9,7 +9,7 @@
         <p>角色的增加，修改，删除。角色标识用于控制系统中各个模块的权限.权限的配置请联系管理员.</p>
         <div style="margin:20px 0;"></div>
         <table class="easyui-datagrid" title="角色管理" id="tt" style="width:700px;height:400px"
-               data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/role/',method:'get',toolbar:toolbar">
+               data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/role/',method:'get',toolbar:'#tb'">
             <thead>
                 <tr>
                     <th data-options="field:'id',width:80">ID</th>
@@ -18,34 +18,27 @@
                 </tr>
             </thead>
         </table>
+        <div id="tb" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addOne()">增加</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="updateOne()">更新</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteObj()">删除</a>
+            </div>
+        </div>
         <script type="text/javascript">
 
-            var toolbar = [{
-                    text: '增加',
-                    iconCls: 'icon-add',
-                    handler: function() {
-                        window.location = '<%=root%>/view/role/add.jsp';
-                    }
-                }, {
-                    text: '更新',
-                    iconCls: 'icon-edit',
-                    handler: function() {
-                        var row = $('#tt').datagrid('getSelected');
-                        if (row) {
-                            window.location = '<%=root%>/view/role/edit.jsp?id=' + row.id;
-                        }
+            function addOne() {
+                window.location = '<%=root%>/view/role/add.jsp';
+            }
 
-                    }
-                }, '-', {
-                    text: '删除',
-                    iconCls: 'icon-remove',
-                    handler: function() {
-                        deleteObj();
-                    }
-                }];
-
-
-
+            function updateOne() {
+                var row = $('#tt').datagrid('getSelected');
+                if (row) {
+                    window.location = '<%=root%>/view/role/edit.jsp?id=' + row.id;
+                }
+            }
+            
+        
             function deleteObj() {
 
                 var row = $('#tt').datagrid('getSelected');

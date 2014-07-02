@@ -7,7 +7,7 @@
     <classPathEntry location="D:\workspace\NetbeanWorkSpace\git\aps\AutoPrinterServer\lib\postgresql-9.2-1002.jdbc4.jar" />  
   
     <context id="DB2Tables" targetRuntime="MyBatis3">  
-        <plugin type="com.mc.printer.server.dataGen.GenData" />
+        <plugin type="com.mc.printer.server.dataGen.GenDataPostgreSQL" />
         <commentGenerator>  
             <property name="suppressAllComments" value="true" /> 
             <property name="suppressDate" value="true" />

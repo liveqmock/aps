@@ -137,6 +137,8 @@
                     error: errorFun,
                     contentType: "application/json"
                 });
+                
+                window.location = '<%=root%>/';
  
             }
         </script>

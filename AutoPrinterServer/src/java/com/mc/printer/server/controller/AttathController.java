@@ -193,7 +193,8 @@ public class AttathController {
 
             if (oringianlName.endsWith(Constants.VIDEO_SUFFIX)) {
 
-                filePath = uploadPath + File.separator + mfiles.getOriginalFilename();
+                //filePath = uploadPath + File.separator + mfiles.getOriginalFilename(); //视频路径暂时写死，以后有需求再改？？
+                 filePath = uploadPath + File.separator + "adv.flv"; 
                 log.info("----------try to upload file:"
                         + mfiles.getOriginalFilename() + " to " + filePath);
                 try {
@@ -262,7 +263,7 @@ public class AttathController {
 
         }
 
-        return checkfil(request);
+        return checkfilv(request);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/video/deploy")

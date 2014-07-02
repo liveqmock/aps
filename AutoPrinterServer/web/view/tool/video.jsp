@@ -27,14 +27,6 @@
                             <td>文件1:</td>
                             <td><input class="easyui-validatebox" type="file" name="file" id="file" data-options="required:true" /></td>
                         </tr>
-                        <tr>
-                            <td>文件2:</td>
-                            <td><input type="file" name="file" id="file"/></td>
-                        </tr>
-                        <tr>
-                            <td>文件3:</td>
-                            <td><input type="file" name="file" id="file"/></td>
-                        </tr>
                     </table>
                     <div style="text-align:center;padding:5px">
                         <input type="submit" value="上传" />
