@@ -3,12 +3,13 @@
  */
 package com.mc.printer.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mc.printer.server.constants.Constants;
 import com.mc.printer.server.entity.TbBranch;
 import com.mc.printer.server.entity.child.DataSearchEntity;
 import com.mc.printer.server.entity.child.DataSearchResult;
 import com.mc.printer.server.entity.child.InitEntity;
-import com.mc.printer.server.entity.child.SavedDataEntity;
 import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.entity.common.LoginUserDetails;
@@ -17,7 +18,12 @@ import com.mc.printer.server.service.common.CommServiceIF;
 import com.mc.printer.server.service.saveddata.DataServiceIF;
 import com.mc.printer.server.utils.DateHelper;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -33,7 +39,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -169,6 +174,39 @@ public class AdminController {
             request.setAttribute("condition", bean);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        /*graph table*/
+        if (data != null && data.getResult() != null && data.getResult().size() > 0) {
+            List<DataSearchResult> ls = data.getResult();
+            for (DataSearchResult ds : ls) {
+                ds.getBranchName();
+            }
+
+        }
+        HashMap map = new HashMap();
+        map.put("test1", "交行业务");
+        map.put("test2", "建行业务");
+        map.put("test3", "农行业务");
+
+        List<String> yewu = new ArrayList();
+        yewu.add("交行业务");
+        yewu.add("建行业务");
+        yewu.add("农行业务");
+        request.setAttribute("yewu", yewu);
+
+        List<String> grahData = new ArrayList();
+        grahData.add("[1.0, {label: 'Dog'}]");
+        grahData.add("[1.3, {label: 'Raccoon'}]");
+        grahData.add("[[1.5, 1.0, 0.51], {label: '2005'}]");
+        request.setAttribute("grahData", grahData);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String test = mapper.writeValueAsString(grahData);
+            System.out.println("@@@@@@@@@@@@@@@@test:"+test);
+        } catch (JsonProcessingException ex) {
+           
         }
 
         return new ModelAndView("search/list", "data", data);

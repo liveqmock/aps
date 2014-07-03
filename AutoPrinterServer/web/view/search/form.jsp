@@ -12,7 +12,7 @@
                 <form id="ff" method="post" action="<%=root%>/service/admin/search/filter">
                     <table cellpadding="5">
                         <tr>
-                            <td>单据名称:</td>
+                            <td>表单页名称:</td>
                             <td><input name="danjuName" id="danjuName" style="width:80px" /> </td>
                         </tr>
                         <tr>

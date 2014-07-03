@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
     <head>
@@ -59,7 +59,6 @@
         </div>
         <script type="text/javascript">
 
-
             $('#dg').datagrid();
 
             function formatRole(value) {
@@ -67,14 +66,12 @@
                     return value.rolename;
                 }
             }
-            ;
-
+   
             function formatDep(value) {
                 if (value) {
                     return value.depname;
                 }
             }
-            ;
 
 
             jQuery(document).ready(function() {
@@ -97,7 +94,7 @@
 
                     // Bar width in arbitrary units, 1.0 means the bars will be snuggled
                     // up next to each other
-                    barWidth: 0.8,
+                    barWidth: 0.2,
                     // The label on top of the bar - can contain HTML
                     // formatNumber inserts commas as thousands separators in a number
                     barLabel: function(index) {
@@ -122,7 +119,7 @@
                     legend: {
                         // Data can be an array of any type of object, but the default
                         // formatter works with strings
-                        data: ["North", "East", "West"],
+                        data: "${yewu}".replace('[','').replace(']','').split(','),
                         // By default, the colors of the graph are used
                         color: function(index) {
                             return ['#E57536', '#82293B'][index % 2]
