@@ -9,7 +9,7 @@
                cellpadding="0" cellspacing="0" width="100%">
             <tbody>
                 <tr>
-                    <td class="sun-lightblue" align="right"><font color="#000000"><a href="<%=root%>/service/logout/clear">注销</a></font></td>
+                    <td class="sun-lightblue" align="right"><font color="#ffffff"><a href="<%=root%>/service/logout/clear">注销</a></font></td>
                 </tr>
                 <tr>
                     <td class="sun-darkblue">

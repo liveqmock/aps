@@ -21,9 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -177,36 +178,66 @@ public class AdminController {
         }
 
         /*graph table*/
+        HashMap<String, HashMap<String, Integer>> branchMap = new HashMap();
+        Set<String> piaojuSet = new HashSet();
         if (data != null && data.getResult() != null && data.getResult().size() > 0) {
             List<DataSearchResult> ls = data.getResult();
+
             for (DataSearchResult ds : ls) {
-                ds.getBranchName();
+                String bname = ds.getBranchName();
+                String danju = ds.getDanjuName();
+                piaojuSet.add(danju);
+                if (branchMap.containsKey(bname)) {
+                    HashMap<String, Integer> dmap = branchMap.get(bname);
+                    if (dmap.containsKey(danju)) {
+                        int count = dmap.get(danju) + 1;
+                        dmap.put(danju, count);
+                    } else {
+                        dmap.put(danju, 1);
+                    }
+                } else {
+                    HashMap<String, Integer> dmap = new HashMap();
+                    dmap.put(danju, 1);
+                    branchMap.put(bname, dmap);
+                }
             }
-
         }
-        HashMap map = new HashMap();
-        map.put("test1", "交行业务");
-        map.put("test2", "建行业务");
-        map.put("test3", "农行业务");
 
-        List<String> yewu = new ArrayList();
-        yewu.add("交行业务");
-        yewu.add("建行业务");
-        yewu.add("农行业务");
-        request.setAttribute("yewu", yewu);
+        List<List> jsonJS = new ArrayList();
+        Set<String> branchm = branchMap.keySet();
+        if (branchm != null) {
+            Iterator<String> it = branchm.iterator();
+            while (it.hasNext()) {
+                String key = it.next();
 
-        List<String> grahData = new ArrayList();
-        grahData.add("[1.0, {label: 'Dog'}]");
-        grahData.add("[1.3, {label: 'Raccoon'}]");
-        grahData.add("[[1.5, 1.0, 0.51], {label: '2005'}]");
-        request.setAttribute("grahData", grahData);
+                List rowValue = new ArrayList();
+                List piaojuNumbers = new ArrayList();
+            HashMap branchNameLabels = new HashMap();
+            branchNameLabels.put("label", key);
+                for (String piaoju : piaojuSet) {
+                    HashMap<String, Integer> map = branchMap.get(key);
+                    if (map.containsKey(piaoju)) {
+                        piaojuNumbers.add(map.get(piaoju));
+                    } else {
+                        piaojuNumbers.add(0);
+                    }
+                }
 
+                rowValue.add(piaojuNumbers); //增加票据数据
+                rowValue.add(branchNameLabels);
+                jsonJS.add(rowValue);
+            }
+        }
+
+        log.debug("get piaoju hashset:"+piaojuSet.size());
+        request.setAttribute("grahicpiaoju", piaojuSet);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String test = mapper.writeValueAsString(grahData);
-            System.out.println("@@@@@@@@@@@@@@@@test:"+test);
+            String jsonScriptObj = mapper.writeValueAsString(jsonJS);
+            request.setAttribute("grahicdata", jsonScriptObj);
+            log.info("transfer to json data:" + jsonScriptObj);
         } catch (JsonProcessingException ex) {
-           
+            log.error(ex);
         }
 
         return new ModelAndView("search/list", "data", data);
