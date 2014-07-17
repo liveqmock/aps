@@ -24,20 +24,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DepartmentService implements CommServiceIF<TbDepartment, Long> {
-
+    
     private static final Log log = LogFactory.getLog(DepartmentService.class);
     @Resource
     TbDepartmentMapper mapper;
-
+    
     @Resource
     PkgeneratorServiceIF pkService;
-
+    
     @Override
     public TbDepartment findDataByKey(Long id) {
         log.info("try to find department:" + id);
         return mapper.selectByPrimaryKey(id);
     }
-
+    
     @Override
     public CommFindEntity<TbDepartment> findAll(TbDepartment conditionEntity) {
         log.info("try to find all departmenet");
@@ -51,9 +51,15 @@ public class DepartmentService implements CommServiceIF<TbDepartment, Long> {
             if (conditionEntity.getFlag() != null && conditionEntity.getFlag() > 0) {
                 crite.andFlagEqualTo(conditionEntity.getFlag());
             }
+            if (conditionEntity.getDepfather() != null) {
+                crite.andDepfatherEqualTo(conditionEntity.getDepfather());
+            }
+            if (conditionEntity.getExt1() != null&&!conditionEntity.getExt1().trim().equals("")) {
+                crite.andExt1Like("%"+conditionEntity.getExt1()+"%");
+            }
         }
-
-        example.setOrderByClause("id DESC");
+        
+        example.setOrderByClause("depfather asc,id desc");
         List<TbDepartment> ls = mapper.selectByExample(example);
         if (ls != null) {
             log.info("found departmenet:" + ls.size());
@@ -62,32 +68,35 @@ public class DepartmentService implements CommServiceIF<TbDepartment, Long> {
             log.debug("found empty departmenet..");
         }
         result.setResult(ls);
-
+        
         return result;
     }
-
+    
     @Override
     public int saveData(TbDepartment bean) {
         log.info("insert departmenet" + bean.getDepname());
         long key = pkService.getPrimaryKey("branch", "id");
         bean.setId(key);
         bean.setFlag(Constants.FLAG_STATUS_ACTIVE);
+        if (bean.getDepfather() == null) {
+            bean.setDepfather(0l);
+        }
         return mapper.insertSelective(bean);
     }
-
+    
     @Override
     public int deleteDataByKey(Long id) {
         log.info("delete departmenet" + id);
         TbDepartment dep = mapper.selectByPrimaryKey(id);
-        if(dep!=null){
+        if (dep != null) {
             dep.setFlag(Constants.FLAG_STATUS_DELETE);
             return mapper.updateByPrimaryKeySelective(dep);
-        }else{
-            log.warn("can not delete departmenet " + id+",it's not exiting.");
+        } else {
+            log.warn("can not delete departmenet " + id + ",it's not exiting.");
         }
         return 0;
     }
-
+    
     @Override
     public int updateData(TbDepartment bean) {
         log.info("update departmenet:" + bean.getDepname());

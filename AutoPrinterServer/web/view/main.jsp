@@ -9,13 +9,12 @@
                cellpadding="0" cellspacing="0" width="100%">
             <tbody>
                 <tr>
-                    <td class="sun-lightblue" align="right"><font color="#ffffff"><a href="<%=root%>/service/logout/clear">注销</a></font></td>
+                    <td class="sun-lightblue" align="left"> <font size="2" >服务端版本:<%=Constants.VERSION%>, 欢迎您:${user.name},角色:${user.role.rolename},部门:${user.department.depname}</font></td>
+                    <td class="sun-lightblue" align="right"><a href="<%=root%>/service/logout/clear"><font color="white">注销</font></a></td>
                 </tr>
                 <tr>
-                    <td class="sun-darkblue">
-                        <h1>欢迎使用银行自助填单管理系统</h1>
-
-                        <font size="4">服务端版本:<%=Constants.VERSION%>, 欢迎您:${user.name}(${user.role.rolename}),部门:${user.department.depname}</font>
+                    <td colspan="2" class="sun-darkblue" >
+                        <h2 >欢迎使用银行自助填单管理系统</h2>
                     </td>
                 </tr>
             </tbody>
@@ -30,6 +29,7 @@
                         <li><a href="<%=root%>/service/admin/branch" target="contextframe">网点监控</a></li>
                         <li><a href="<%=root%>/service/admin/tool" target="contextframe">制单工具</a></li>
                         <li><a href="<%=root%>/service/admin/deploy" target="contextframe">推送部署</a></li>
+                        <li><a href="<%=root%>/service/admin/control" target="contextframe">业务控制</a></li>
                         <li><a href="<%=root%>/service/admin/video/deploy" target="contextframe">视频广告</a></li>
                         <li><a href="<%=root%>/service/admin/search" target="contextframe">综合查询</a></li>
                         <li><a href="<%=root%>/service/admin/dep" target="contextframe">部门管理</a></li>

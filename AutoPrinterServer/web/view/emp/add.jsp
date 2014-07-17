@@ -23,16 +23,7 @@
                         <tr>
                             <td>部门:</td>
                             <td>
-                                <input class="easyui-combobox" 
-                                       name="depid"
-                                       id="depid"
-                                       data-options="
-                                       url:'<%=root%>/service/dep/',
-                                       method:'get',
-                                       valueField:'id',
-                                       textField:'depname',
-                                       panelHeight:'auto'
-                                       ">
+                                <input class="easyui-combotree" name="depid" id="depid" data-options="url:'<%=root%>/service/dep/tree',method:'get'" style="width:200px;">
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +64,7 @@
                 var params = {
                     "name": $("#name").val(),
                     "roleid": $("#roleid").combobox('getValue'),
-                    "depid": $("#depid").combobox('getValue'),
+                    "depid": $("#depid").combotree('getValue'),
                     "descms": $("#descms").val(),
                     "passwd": $("#passwd").val()
                 };

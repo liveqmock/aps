@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.mc.printer.server.controller;
 
 import com.mc.printer.server.controller.common.ComResponse;
 import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.LoginUserDetails;
 import com.mc.printer.server.service.emp.LoginServiceIF;
+import com.mc.printer.server.service.log.LogServiceIF;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,10 +31,12 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class LoginController {
-   private static final Log log = LogFactory.getLog(LoginController.class);
+
+    private static final Log log = LogFactory.getLog(LoginController.class);
     @Resource
     LoginServiceIF loginService;
-   
+    @Resource
+    private LogServiceIF logService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -47,11 +49,12 @@ public class LoginController {
                 UserEntity session = user.getUserSessionEntity();
                 if (session != null) {
                     log.info("LoginController," + session.getName() + ",logined.");
+                    logService.saveLog("登录系统:" + session.getName());
                 } else {
                     log.error("LoginController,user is not exist.");
                 }
 
-                return new ModelAndView("main","user",session);
+                return new ModelAndView("main", "user", session);
             } else {
                 log.error("LoginController,login failed. principal is not a  UserDetails object!");
                 return null;
@@ -74,5 +77,5 @@ public class LoginController {
         log.info("LoginController,logout.invalidate session");
         comResponse.setResponseStatus(ComResponse.STATUS_OK);
         return new ModelAndView("toppage");
-    } 
+    }
 }

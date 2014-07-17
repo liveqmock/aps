@@ -6,16 +6,31 @@
 package com.mc.printer.server.controller;
 
 import com.mc.printer.server.constants.Constants;
+import com.mc.printer.server.entity.TbControl;
+import com.mc.printer.server.entity.child.GuideBean;
+import com.mc.printer.server.entity.child.GuideCompBean;
+import com.mc.printer.server.service.control.ControlServiceIF;
+import com.mc.printer.server.service.log.LogServiceIF;
 import com.mc.printer.server.utils.DateHelper;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -34,6 +49,21 @@ import org.springframework.web.servlet.ModelAndView;
 public class AttathController {
 
     private static final Log log = LogFactory.getLog(AttathController.class);
+
+    public static final String TEMP_DIR = "temp";
+
+    @Resource
+    ControlServiceIF controlService;
+
+    @Resource
+    private LogServiceIF logService;
+
+    public GuideBean read(InputStream inputStream, Class cls) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(new Class[]{cls});
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        GuideBean newxmllBean = (GuideBean) unmarshaller.unmarshal(inputStream);
+        return newxmllBean;
+    }
 
     private String upload(MultipartHttpServletRequest request) {
         try {
@@ -71,11 +101,66 @@ public class AttathController {
                     mfiles.transferTo(ufiles);
                     log.info("----------upload successful.:"
                             + ufiles.getAbsolutePath());
+
+                    /*button status更新到数据库中*/
+                    if (oringianlName.endsWith(Constants.GUIDE_SUFFIX)) {
+                        if (ufiles.exists()) {
+                            ZipFile zipFile = new ZipFile(ufiles);
+
+                            ZipEntry xmlEntry = null;
+                            Enumeration<? extends ZipEntry> entrys = zipFile.entries();
+                            while (entrys.hasMoreElements()) {
+                                ZipEntry entry = entrys.nextElement();
+                                String name = entry.getName();
+                                if (!name.startsWith(TEMP_DIR)) {
+                                    continue;
+                                }
+
+                                if (name.endsWith(".xml")) {
+                                    xmlEntry = entry;
+                                    break;
+                                }
+
+                            }
+
+                            log.debug("read guide xml:" + xmlEntry);
+
+                            if (xmlEntry != null) {
+                                try (InputStream zipInputStream = zipFile.getInputStream(xmlEntry)) {
+                                    GuideBean guide = read(zipInputStream, GuideBean.class);
+                                    List<GuideCompBean> guideArray = guide.getElements();
+                                    String guideName = guide.getGuideName();
+                                    if (guideArray != null) {
+                                        int k = 0;
+                                        for (GuideCompBean com : guideArray) {
+                                            String type = com.getType();
+                                            String buttonName = com.getText();
+                                            boolean control = com.isRemoteControl();
+                                            if (type.equals("Button") && control) {
+                                                TbControl tbauth = new TbControl();
+//                                                tbauth.setBranchname("");
+                                                tbauth.setButtonname(buttonName);
+                                                tbauth.setGuidename(guideName);
+                                                controlService.saveControl(tbauth);
+                                                k++;
+                                            }
+                                        }
+                                        log.debug("finish insert to control table. total:" + k);
+                                    } else {
+                                        log.debug("guideArray is null");
+                                    }
+                                    zipInputStream.close();
+                                }
+                            }
+
+                        }
+                    }
+
                 } catch (IllegalStateException e) {
                     log.error("IllegalStateException:" + e.getMessage());
                     e.printStackTrace();
-                } catch (IOException e) {
-                    log.error("IO exception:" + e.getMessage());
+                } catch (Exception e) {
+                    log.error("exception:" + e.getMessage());
                     e.printStackTrace();
                 }
             } else {
@@ -90,45 +175,52 @@ public class AttathController {
     public ModelAndView uploadUrl(MultipartHttpServletRequest request) {
         String filePath = upload(request);
         log.info("----------upload finished.:" + filePath);
+        logService.saveLog("推送部署模块.");
         return checkfil(request);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/deploy/delete/")
     public ModelAndView delete(@RequestParam String name, HttpServletRequest request) {
-        String path = System.getProperty("user.dir");
-        if (path.trim().equals("")) {
-            path = request.getRealPath("/");
-        }
-        String uploadPath = Constants.UPLOAD_PATH;
-        File uploadDir = new File(path + uploadPath);
-        log.debug("try to delete:" + name);
-        if (!name.trim().equals("") && uploadDir.exists() && uploadDir.isDirectory()) {
-            File[] ls = uploadDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (name.endsWith(Constants.GUIDE_SUFFIX) || name.endsWith(Constants.MODEL_SUFFIX)) {
-                        return true;
+        try {
+            String path = System.getProperty("user.dir");
+            if (path.trim().equals("")) {
+                path = request.getRealPath("/");
+            }
+            String uploadPath = Constants.UPLOAD_PATH;
+            File uploadDir = new File(path + uploadPath);
+            //name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
+            log.debug("try to delete:" + name);
+            if (!name.trim().equals("") && uploadDir.exists() && uploadDir.isDirectory()) {
+                File[] ls = uploadDir.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        if (name.endsWith(Constants.GUIDE_SUFFIX) || name.endsWith(Constants.MODEL_SUFFIX)) {
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
+
+                });
+                if (ls != null && ls.length > 0) {
+                    for (File f : ls) {
+                        if (f.getName().equals(name)) {
+                            try {
+                                f.delete();
+                                log.debug("delete file sucessfully.");
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
+                            break;
+                        }
+                    }
                 }
 
-            });
-            if (ls != null && ls.length > 0) {
-                for (File f : ls) {
-                    if (f.getName().equals(name)) {
-                        try {
-                            f.delete();
-                            log.debug("delete file sucessfully.");
-                        } catch (Exception e) {
-                            log.error(e);
-                        }
-                        break;
-                    }
-                }
             }
 
+        } catch (Exception ex) {
+            log.error(ex);
         }
-
+        logService.saveLog("删除模块："+name);
         return checkfil(request);
     }
 
@@ -167,7 +259,7 @@ public class AttathController {
         }
         return new ModelAndView("tool/deploy", "files", files);
     }
-    
+
     private String uploadV(MultipartHttpServletRequest request) {
         try {
             request.setCharacterEncoding("UTF-8");
@@ -194,7 +286,7 @@ public class AttathController {
             if (oringianlName.endsWith(Constants.VIDEO_SUFFIX)) {
 
                 //filePath = uploadPath + File.separator + mfiles.getOriginalFilename(); //视频路径暂时写死，以后有需求再改？？
-                 filePath = uploadPath + File.separator + "adv.flv"; 
+                filePath = uploadPath + File.separator + "adv.flv";
                 log.info("----------try to upload file:"
                         + mfiles.getOriginalFilename() + " to " + filePath);
                 try {
@@ -224,6 +316,7 @@ public class AttathController {
     public ModelAndView uploadUrlV(MultipartHttpServletRequest request) {
         String filePath = uploadV(request);
         log.info("----------upload finished.:" + filePath);
+        logService.saveLog("推送部署视频");
         return checkfilv(request);
     }
 
@@ -263,6 +356,7 @@ public class AttathController {
 
         }
 
+        logService.saveLog("删除视频:"+name);
         return checkfilv(request);
     }
 

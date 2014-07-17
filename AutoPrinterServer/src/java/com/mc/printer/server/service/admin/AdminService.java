@@ -48,24 +48,23 @@ public class AdminService implements AdminServiceIF {
         log.info("start to init. database data.");
 
         if (eneity != null) {
+
+            String roles = "";
+            
+            for(int i=0;i<Constants.ROLE_PAGES_CN.length;i++){
+              if(i<Constants.ROLE_PAGES_CN.length-1){
+                  roles+=Constants.ROLE_PAGES_CN[i]+",";
+              }else{
+                   roles+=Constants.ROLE_PAGES_CN[i];
+              }
+            }
+
             /*首先初始化角色*/
             TbRole role1 = new TbRole();
-            role1.setRolename("ROLE_ADMIN");
+            role1.setRolename("管理员");
             role1.setFlag(Constants.FLAG_STATUS_ACTIVE);
-            role1.setRoleid(1);
+            role1.setExt1(roles);
             roleService.saveData(role1);
-
-            TbRole role2 = new TbRole();
-            role2.setRolename("ROLE_BRANCH");
-            role2.setFlag(Constants.FLAG_STATUS_ACTIVE);
-            role2.setRoleid(2);
-            roleService.saveData(role2);
-
-            TbRole role3 = new TbRole();
-            role3.setRolename("ROLE_USER");
-            role3.setFlag(Constants.FLAG_STATUS_ACTIVE);
-            role3.setRoleid(3);
-            roleService.saveData(role3);
 
             log.info("role table completed.");
 
@@ -91,7 +90,7 @@ public class AdminService implements AdminServiceIF {
             }
             log.info("employee table completed.");
             return empService.saveData(user);
-            
+
         }
 
         return 1;

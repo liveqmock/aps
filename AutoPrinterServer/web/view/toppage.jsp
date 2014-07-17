@@ -10,15 +10,14 @@
     <body>
         <table border="0"
                cellpadding="0" cellspacing="0" width="100%">
-            <tbody>
+           <tbody>
                 <tr>
-                    <td class="sun-lightblue"></td>
+                    <td class="sun-lightblue" align="left"> <font size="2" >服务端版本:<%=Constants.VERSION%></font></td>
+                    <td class="sun-lightblue" align="right"></td>
                 </tr>
                 <tr>
-                    <td class="sun-darkblue">
-                        <h1>欢迎使用银行自助填单管理系统</h1>
-
-                        <font size="4">服务端版本:<%=Constants.VERSION%></font>
+                    <td colspan="2" class="sun-darkblue" >
+                        <h2 >欢迎使用银行自助填单管理系统</h2>
                     </td>
                 </tr>
             </tbody>

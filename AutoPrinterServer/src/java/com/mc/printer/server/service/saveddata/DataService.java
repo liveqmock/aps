@@ -5,6 +5,7 @@
  */
 package com.mc.printer.server.service.saveddata;
 
+import com.mc.printer.server.constants.Constants;
 import com.mc.printer.server.entity.TbBranch;
 import com.mc.printer.server.entity.TbBranchExample;
 import com.mc.printer.server.entity.TbSavedata;
@@ -16,8 +17,10 @@ import com.mc.printer.server.mapper.TbSavedataMapper;
 import com.mc.printer.server.service.branch.BranchService;
 import com.mc.printer.server.service.common.CommServiceIF;
 import com.mc.printer.server.service.pkkey.PkgeneratorServiceIF;
+import com.mc.printer.server.utils.DateHelper;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.Resource;
 import net.sf.cglib.beans.BeanCopier;
@@ -31,21 +34,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DataService implements CommServiceIF<SavedDataEntity, Long> {
-    
+
     public static BeanCopier copier = BeanCopier.create(TbSavedata.class, SavedDataEntity.class, false);
-    
+
     public static BeanCopier recopier = BeanCopier.create(SavedDataEntity.class, TbSavedata.class, false);
-    
+
     private static final Log log = LogFactory.getLog(BranchService.class);
     @Resource
     TbBranchMapper branchMapper;
-    
+
     @Resource
     PkgeneratorServiceIF pkService;
-    
+
     @Resource
     TbSavedataMapper mapper;
-    
+
     @Override
     public SavedDataEntity findDataByKey(Long id) {
         log.info("try to find data:" + id);
@@ -59,15 +62,15 @@ public class DataService implements CommServiceIF<SavedDataEntity, Long> {
         }
         return target;
     }
-     
+
     @Override
     public CommFindEntity<SavedDataEntity> findAll(SavedDataEntity conditionEntity) {
         log.info("try to find all data");
         CommFindEntity<SavedDataEntity> result = new CommFindEntity<SavedDataEntity>();
         TbSavedataExample example = new TbSavedataExample();
-        
+
         TbSavedataExample.Criteria crite = example.createCriteria();
-        
+
         if (conditionEntity != null) {
             if (conditionEntity.getKey() != null) {
                 crite.andKeyEqualTo(conditionEntity.getKey());
@@ -75,15 +78,15 @@ public class DataService implements CommServiceIF<SavedDataEntity, Long> {
             if (conditionEntity.getBranchid() != null && conditionEntity.getBranchid() > 0) {
                 crite.andBranchidEqualTo(conditionEntity.getBranchid());
             }
-            
+
             if (conditionEntity.getSubmitdate() != null) {
                 crite.andSubmitdateGreaterThan(conditionEntity.getSubmitdate());
             }
-            
+
         }
-        
+
         example.setOrderByClause("submitdate DESC");
-        
+
         List<TbSavedata> all = mapper.selectByExample(example);
         List<SavedDataEntity> allEntity = new ArrayList();
         if (all != null) {
@@ -94,7 +97,7 @@ public class DataService implements CommServiceIF<SavedDataEntity, Long> {
                     TbBranch roles = branchMapper.selectByPrimaryKey(empl.getBranchid());
                     allUse.setBranch(roles);
                 }
-                
+
                 copier.copy(empl, allUse, null);
                 allEntity.add(allUse);
             }
@@ -102,51 +105,81 @@ public class DataService implements CommServiceIF<SavedDataEntity, Long> {
         } else {
             log.debug("found empty data.");
         }
-        
+
         result.setResult(allEntity);
         return result;
     }
-    
+
     @Override
     public int saveData(SavedDataEntity bean) {
+
         log.info("insert data" + bean.getKey());
+        TbSavedataExample example = new TbSavedataExample();
+        example.createCriteria().andKeyEqualTo(bean.getKey());
+        List<TbSavedata> all = mapper.selectByExample(example);
+        if (all != null) {
+            HashMap<String, TbSavedata> map = new HashMap();
+            List<TbSavedata> filter = new ArrayList();
+            for (TbSavedata d : all) {
+                String dateStr = "key";
+                if (d.getSubmitdate() != null) {
+                    dateStr = DateHelper.format(d.getSubmitdate(), "yyyy/MM/dd HH:mm");
+                }
+
+                if (!map.containsKey(dateStr)) {
+                    map.put(dateStr, d);
+                    filter.add(d);
+                }
+            }
+            int size = map.size();
+            log.debug(bean.getKey()+",total:"+size+",max approved num:"+Constants.MAX_NUMBER_EACH_USER);
+            if (size >= Constants.MAX_NUMBER_EACH_USER) {
+                for (int k = 0; k < (size - Constants.MAX_NUMBER_EACH_USER + 1); k++) {
+                    TbSavedata oldData = filter.get(0); //是最旧的数据
+                    log.debug("delete old data:" + oldData.getId());
+                    deleteDataByKey(oldData.getId());
+                }
+            }
+        }
+
+        log.info("found if max saved data");
         long key = pkService.getPrimaryKey("saveddata", "id");
         bean.setId(key);
         TbSavedata savedata = new TbSavedata();
         recopier.copy(bean, savedata, null);
-        
+
         if (bean.getBranch() != null && !bean.getBranch().getAddress().trim().equals("")) {
             String ip = bean.getBranch().getAddress();
             TbBranchExample br = new TbBranchExample();
             br.createCriteria().andAddressEqualTo(ip);
             List<TbBranch> tb = branchMapper.selectByExample(br);
-            
+
             if (tb != null && tb.size() > 0) {
                 TbBranch branch = tb.get(0);
                 log.info("found branch:" + branch.getName());
                 long pk = branch.getId();
                 savedata.setBranchid(pk);
             }
-            
+
         }
         savedata.setSubmitdate(new Date());
-        
+
         return mapper.insertSelective(savedata);
     }
-    
+
     @Override
     public int deleteDataByKey(Long id) {
         log.info("delete data" + id);
         return mapper.deleteByPrimaryKey(id);
     }
-    
+
     @Override
     public int updateData(SavedDataEntity bean) {
         log.info("update data" + bean.getKey());
-        
+
         TbSavedata savedata = new TbSavedata();
         recopier.copy(bean, savedata, null);
         return mapper.updateByPrimaryKeySelective(savedata);
     }
-    
+
 }

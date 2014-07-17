@@ -76,7 +76,7 @@ public class RoleService implements CommServiceIF<TbRole, Long> {
         log.info("insert role" + bean.getRolename());
         long key = pkService.getPrimaryKey("role", "id");
         bean.setId(key);
-        bean.setFlag(Constants.FLAG_STATUS_ACTIVE);
+        bean.setFlag(Constants.FLAG_STATUS_ACTIVE);        
         return mapper.insertSelective(bean);
     }
 

@@ -1,5 +1,8 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%    String id = request.getParameter("id");
+<%    List roleArray = Arrays.asList(Constants.ROLE_PAGES_CN);
+    request.setAttribute("roleArray", roleArray);
 %>
 <html>
     <head>
@@ -9,21 +12,47 @@
         <h2>修改内容</h2>
         <p>请按照左边提示，修改对应选项.</p>
         <div style="margin:20px 0;"></div>
-        <div class="easyui-panel" title="修改" style="width:500px">
-            <div style="padding:10px 60px 20px 60px">
+        <div class="easyui-panel" title="修改" style="width:700px">
+            <div style="padding:10px 10px 10px 10px">
                 <form id="ff" method="post">
                     <table cellpadding="5">
                         <tr>
                             <td>ID:</td>
-                            <td><input class="easyui-validatebox" type="text" name="id" id="id" disabled></input></td>
-                        </tr>
-                         <tr>
-                            <td>角色名:</td>
-                            <td><input class="easyui-validatebox" type="text" name="rolename" id="rolename" data-options="required:true"></input></td>
+                            <td><input class="easyui-validatebox" type="text" name="id" id="id" value="${data.id}" disabled></input></td>
                         </tr>
                         <tr>
-                            <td>角色标识:</td>
-                            <td><input class="easyui-validatebox" type="text" name="roleid" id="roleid" data-options="required:true"></input></td>
+                            <td>角色名:</td>
+                            <td><input class="easyui-validatebox" type="text" name="rolename" id="rolename" value="${data.rolename}" data-options="required:true"></input></td>
+                        </tr>
+                        <tr>
+                            <td>访问权限:</td>
+                            <td>
+                                <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td colspan="4">
+                                            <select name="from" id="from" multiple="multiple" size="10" style="width:150px">
+                                                <c:forEach items="${roleArray}" var="current">
+                                                    <option>${current}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                        <td align="center">
+                                            <input type="button" id="addAll" value=" >> " style="width:50px;" /><br />
+                                            <input type="button" id="addOne" value=" > " style="width:50px;" /><br />
+                                            <input type="button" id="removeOne" value="&lt;" style="width:50px;" /><br />
+                                            <input type="button" id="removeAll" value="&lt;&lt;" style="width:50px;" /><br />
+                                        </td>
+                                        <td colspan="4">
+                                            <select name="to" id="to" multiple="multiple" size="10" style="width:150px">
+                                                <c:forEach items="${extarray}" var="current">
+                                                    <option>${current}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
                         </tr>
                     </table>
                 </form>
@@ -37,35 +66,80 @@
 
         <script>
 
-            $('#ff').form('load', '<%=root%>/service/role/<%=id%>');
+            var obj = document.getElementById("to");
+            var objFrom = document.getElementById("from");
+            for (var k = 0; k < obj.options.length; k++) {
+                for (var p = 0; p < objFrom.options.length; p++) {
+                    if (objFrom.options[p].text === obj.options[k].text) {
+                        objFrom.options.remove(p);
+                    }
+                }
+            }
 
-                function submitForm() {
-                    var params = {
-                        "id": $("#id").val(),
+//            $('#ff').form('load', '<%//=root%>/service/role/<%//=id%>');
+
+            function submitForm() {
+                var obj = document.getElementById("to");
+                var optionAll = "";
+                for (var i = 0; i < obj.options.length; i++) {
+                    if (i === obj.options.length - 1) {
+                        optionAll += obj.options[i].text;
+                    } else {
+                        optionAll += obj.options[i].text + ",";
+                    }
+                }
+                var params = {
+                    "id": $("#id").val(),
                     "rolename": $("#rolename").val(),
-                    "roleid": $("#roleid").val()
-                    };
-                    var successFun = function(data, textStatus) {
-                        window.location = '<%=root%>/view/role/list.jsp';
-                    };
-                    var errorFun = function(XMLHttpRequest, textStatus, errorThrown) {
-                    };
+                    "ext1": optionAll
+                };
+                var successFun = function(data, textStatus) {
+                    window.location = '<%=root%>/view/role/list.jsp';
+                };
+                var errorFun = function(XMLHttpRequest, textStatus, errorThrown) {
+                };
 
-                    $.ajax({
-                        type: "POST",
-                        url: "<%=root%>/service/role/update",
-                        data: JSON.stringify(params),
-                        async: true,
-                        dataType: 'json',
-                        success: successFun,
-                        error: errorFun,
-                        contentType: "application/json"
-                    });
-                }
+                $.ajax({
+                    type: "POST",
+                    url: "<%=root%>/service/role/update",
+                    data: JSON.stringify(params),
+                    async: true,
+                    dataType: 'json',
+                    success: successFun,
+                    error: errorFun,
+                    contentType: "application/json"
+                });
+            }
 
-                function clearForm() {
-                    $('#ff').form('clear');
-                }
+            function clearForm() {
+                $('#ff').form('clear');
+            }
+
+            $(function() {
+                //选择一项
+                $("#addOne").click(function() {
+                    $("#from option:selected").clone().appendTo("#to");
+                    $("#from option:selected").remove();
+                });
+
+                //选择全部
+                $("#addAll").click(function() {
+                    $("#from option").clone().appendTo("#to");
+                    $("#from option").remove();
+                });
+
+                //移除一项
+                $("#removeOne").click(function() {
+                    $("#to option:selected").clone().appendTo("#from");
+                    $("#to option:selected").remove();
+                });
+
+                //移除全部
+                $("#removeAll").click(function() {
+                    $("#to option").clone().appendTo("#from");
+                    $("#to option").remove();
+                });
+            });
         </script>
 
     </body>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%    String id = request.getParameter("id");
-%>
+    String did = request.getParameter("did");
+%>    
 <html>
     <head>
         <%@ include file="../common.jsp"%>
@@ -24,16 +25,7 @@
                         <tr>
                             <td>部门:</td>
                             <td>
-                                <input class="easyui-combobox" 
-                                       name="depid"
-                                       id="depid"
-                                       data-options="
-                                       url:'<%=root%>/service/dep/',
-                                       method:'get',
-                                       valueField:'id',
-                                       textField:'depname',
-                                       panelHeight:'auto'
-                                       ">
+                                <input class="easyui-combotree" name="depid" value="<%=did%>" id="depid" data-options="url:'<%=root%>/service/dep/tree?status=1',method:'get'" style="width:200px;">
                             </td>
                         </tr>
                         <tr>
@@ -77,8 +69,8 @@
                     var params = {
                         "id": $("#id").val(),
                         "name": $("#name").val(),
-                        "roleid": $("#roleid").combobox ('getValue'),
-                        "depid": $("#depid").combobox ('getValue'),
+                        "roleid": $("#roleid").combobox('getValue'),
+                        "depid": $("#depid").combotree('getValue'),
                         "descms": $("#descms").val()
                     };
                     var successFun = function(data, textStatus) {

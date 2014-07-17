@@ -39,14 +39,17 @@
         </javaClientGenerator>
   
 
-<!--        <table schema="public" tableName="tb_pkgenerator" domainObjectName="TbPkgenerator">  
+        <!--        <table schema="public" tableName="tb_pkgenerator" domainObjectName="TbPkgenerator">  
             <generatedKey column="id" sqlStatement="SELECT currval('tb_pkgenerator_id_seq')" identity="true" />   
         </table> -->
-<!--        <table schema="public" tableName="tb_branch" domainObjectName="TbBranch"/>  -->
-<!--        <table schema="public" tableName="tb_department" domainObjectName="TbDepartment"/> 
+        <!--        <table schema="public" tableName="tb_branch" domainObjectName="TbBranch"/>  -->
+        <!--        <table schema="public" tableName="tb_department" domainObjectName="TbDepartment"/> 
         <table schema="public" tableName="tb_emp" domainObjectName="TbEmployee"/>  
         <table schema="public" tableName="tb_role" domainObjectName="TbRole"/> -->
         <table schema="public" tableName="tb_savedata" domainObjectName="TbSavedata"/> 
+<!--        <table schema="public" tableName="tb_auth" domainObjectName="TbAuth"/> -->
+<!--                <table schema="public" tableName="tb_control" domainObjectName="TbControl"/> -->
+<!--                <table schema="public" tableName="tb_log" domainObjectName="TbLog"/> -->
     </context>  
     
     

@@ -14,7 +14,7 @@
                 <tr>
                     <th data-options="field:'id',width:80">ID</th>
                     <th data-options="field:'rolename',width:80,align:'center'">角色名</th>
-                    <th data-options="field:'roleid',width:240,align:'center'">角色标识</th>
+                    <th data-options="field:'ext1',width:500,align:'left'" formatter="formatWD">权限</th>
                 </tr>
             </thead>
         </table>
@@ -34,11 +34,21 @@
             function updateOne() {
                 var row = $('#tt').datagrid('getSelected');
                 if (row) {
-                    window.location = '<%=root%>/view/role/edit.jsp?id=' + row.id;
+                    window.location = '<%=root%>/service/role/detail/' + row.id;
                 }
             }
-            
-        
+
+            function formatWD(value) {
+                if (value) {
+                    var array = value.split(",");
+                    var newString = "";
+                    for (var i = 0; i < array.length; i++) {
+                        newString += array[i] + "<br />";
+                    }
+                    return newString;
+                }
+            }
+
             function deleteObj() {
 
                 var row = $('#tt').datagrid('getSelected');

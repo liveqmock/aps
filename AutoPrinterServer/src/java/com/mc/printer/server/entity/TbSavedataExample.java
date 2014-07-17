@@ -11,9 +11,9 @@ public class TbSavedataExample {
 
     protected List<Criteria> oredCriteria;
 
-    protected Integer limitStart;
+    protected Integer limit;
 
-    protected Integer limitEnd;
+    protected Integer offset;
 
     public TbSavedataExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -68,20 +68,20 @@ public class TbSavedataExample {
         distinct = false;
     }
 
-    public void setLimitStart(Integer limitStart) {
-        this.limitStart=limitStart;
+    public void setLimit(Integer limit) {
+        this.limit=limit;
     }
 
-    public Integer getLimitStart() {
-        return limitStart;
+    public Integer getLimit() {
+        return limit;
     }
 
-    public void setLimitEnd(Integer limitEnd) {
-        this.limitEnd=limitEnd;
+    public void setOffset(Integer offset) {
+        this.offset=offset;
     }
 
-    public Integer getLimitEnd() {
-        return limitEnd;
+    public Integer getOffset() {
+        return offset;
     }
 
     protected abstract static class GeneratedCriteria {

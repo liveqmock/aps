@@ -2,10 +2,13 @@ package com.mc.printer.server.controller;
 
 import com.mc.printer.server.controller.common.ComResponse;
 import com.mc.printer.server.entity.TbDepartment;
-import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.service.common.CommServiceIF;
+import com.mc.printer.server.service.log.LogServiceIF;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -32,6 +36,9 @@ public class DepartController {
     @Qualifier("departmentService")
     private CommServiceIF<TbDepartment, Long> comService;
 
+    @Resource
+    private LogServiceIF logService;
+
     @RequestMapping(method = RequestMethod.GET, value = "{id}")
     public @ResponseBody
     TbDepartment findDataByKey(@PathVariable Long id) {
@@ -39,17 +46,64 @@ public class DepartController {
         return comService.findDataByKey(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "")
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<TbDepartment> findAll() {
+    List findAll() {
         log.debug("findAll.");
-        CommFindEntity<TbDepartment> data = null;
+        List all = new ArrayList();
+        getChild(0, all, 0);
+        return all;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List findAllTree(@RequestParam(value = "status", defaultValue = "0") int status) {
+        log.debug("findAll.");
+        List result = new ArrayList();
         try {
-            data = comService.findAll(null);
+
+            HashMap map = new HashMap();
+            List child = new ArrayList();
+            map.put("id", 0);
+            map.put("text", "请选择部门");
+            map.put("desc", "");
+            map.put("children", child);
+            result.add(map);
+
+            getChild(0, child, status);
+
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e);
         }
-        return data == null ? null : data.getResult();
+        return result;
+    }
+
+    private void getChild(long pid, List child, int status) {
+        TbDepartment conditionEntity = new TbDepartment();
+        conditionEntity.setDepfather(pid);
+        CommFindEntity<TbDepartment> data = comService.findAll(conditionEntity);
+        if (data != null) {
+            List<TbDepartment> ls = data.getResult();
+            for (TbDepartment tb : ls) {
+                HashMap mapLevel1 = new HashMap();
+                mapLevel1.put("id", tb.getId());
+                mapLevel1.put("text", tb.getDepname());
+                mapLevel1.put("desc", tb.getDescms());
+                mapLevel1.put("pid", pid);
+                mapLevel1.put("ext1", tb.getExt1());
+
+                List children = new ArrayList();
+                getChild(tb.getId(), children, status);
+                if (children.size() > 0) {
+                    mapLevel1.put("children", children);
+                    if (status == 0) {
+                        mapLevel1.put("state", "closed");
+                    }
+                }
+                child.add(mapLevel1);
+            }
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "add", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +116,7 @@ public class DepartController {
             log.info("save result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
             comResponse.setResponseEntity(bean);
+            logService.saveLog("新建部门:" + bean.getDepname());
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);
@@ -80,6 +135,7 @@ public class DepartController {
             int result = comService.deleteDataByKey(id);
             log.info("delete result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
+            logService.saveLog("删除部门ID:" + id);
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);
@@ -99,6 +155,7 @@ public class DepartController {
             log.info("update result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
             comResponse.setResponseEntity(bean);
+            logService.saveLog("更新部门信息:" + bean.getId());
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);

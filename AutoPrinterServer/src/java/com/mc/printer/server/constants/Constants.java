@@ -20,11 +20,11 @@ public class Constants {
 
     public final static int FLAG_STATUS_SLEEP = 3;
 
-    /*下面是和权限绑定在一起*/
-    public final static int ROLE_ADMIN = 1;
-    public final static int ROLE_BRANCH = 2;
-    public final static int ROLE_USER = 3;
-
+    /*下面是和权限绑定在一起,请查看applicationContext-security.xml*/
+    public final static String[] ROLE_PAGES=new String[]{"ROLE_ROLE","ROLE_DEP","ROLE_USER","ROLE_TOOL","ROLE_DEPLOY","ROLE_BRANCH","ROLE_VIDEO","ROLE_SEARCH","ROLE_CONTROL","SYSTEM_SEARCH"};
+    public final static String[] ROLE_PAGES_CN=new String[]{"角色管理","部门管理","用户管理","制单工具","推送部署","网点监控","视频推送","综合查询","业务控制","系统查询"};
+    
+    
     /*toppage 返回状态*/
     public final static int TOPPAGE_TIMEOUT = 1;
     public final static int TOPPAGE_NEEDINIT = 2;
@@ -46,5 +46,8 @@ public class Constants {
 
     /*这个时间一般设置的为客户端的2倍*/
     public final static long CHECKIN_LOOP_SEC = 360;
+    
+    /*每张单据对于每一个客户最大保存数量，超过以后，删除最旧。*/
+    public final static int MAX_NUMBER_EACH_USER = 20;
 
 }

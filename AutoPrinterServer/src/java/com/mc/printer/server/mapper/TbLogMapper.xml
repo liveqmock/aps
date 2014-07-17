@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mc.printer.server.mapper.TbLogMapper" >
+  <resultMap id="BaseResultMap" type="com.mc.printer.server.entity.TbLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="depname" property="depname" jdbcType="VARCHAR" />
+    <result column="eventdate" property="eventdate" jdbcType="TIMESTAMP" />
+    <result column="context" property="context" jdbcType="VARCHAR" />
+    <result column="ext1" property="ext1" jdbcType="VARCHAR" />
+    <result column="depid" property="depid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, username, depname, eventdate, context, ext1, depid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mc.printer.server.entity.TbLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.tb_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null and limit>=0" >
+      limit #{limit} offset #{offset}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.tb_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.tb_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mc.printer.server.entity.TbLogExample" >
+    delete from public.tb_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mc.printer.server.entity.TbLog" >
+    insert into public.tb_log (id, username, depname, 
+      eventdate, context, ext1, 
+      depid)
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{depname,jdbcType=VARCHAR}, 
+      #{eventdate,jdbcType=TIMESTAMP}, #{context,jdbcType=VARCHAR}, #{ext1,jdbcType=VARCHAR}, 
+      #{depid,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mc.printer.server.entity.TbLog" >
+    insert into public.tb_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="depname != null" >
+        depname,
+      </if>
+      <if test="eventdate != null" >
+        eventdate,
+      </if>
+      <if test="context != null" >
+        context,
+      </if>
+      <if test="ext1 != null" >
+        ext1,
+      </if>
+      <if test="depid != null" >
+        depid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="depname != null" >
+        #{depname,jdbcType=VARCHAR},
+      </if>
+      <if test="eventdate != null" >
+        #{eventdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="context != null" >
+        #{context,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="depid != null" >
+        #{depid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mc.printer.server.entity.TbLogExample" resultType="java.lang.Integer" >
+    select count(*) from public.tb_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update public.tb_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depname != null" >
+        depname = #{record.depname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eventdate != null" >
+        eventdate = #{record.eventdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.context != null" >
+        context = #{record.context,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext1 != null" >
+        ext1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depid != null" >
+        depid = #{record.depid,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update public.tb_log
+    set id = #{record.id,jdbcType=BIGINT},
+      username = #{record.username,jdbcType=VARCHAR},
+      depname = #{record.depname,jdbcType=VARCHAR},
+      eventdate = #{record.eventdate,jdbcType=TIMESTAMP},
+      context = #{record.context,jdbcType=VARCHAR},
+      ext1 = #{record.ext1,jdbcType=VARCHAR},
+      depid = #{record.depid,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mc.printer.server.entity.TbLog" >
+    update public.tb_log
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="depname != null" >
+        depname = #{depname,jdbcType=VARCHAR},
+      </if>
+      <if test="eventdate != null" >
+        eventdate = #{eventdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="context != null" >
+        context = #{context,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        ext1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="depid != null" >
+        depid = #{depid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mc.printer.server.entity.TbLog" >
+    update public.tb_log
+    set username = #{username,jdbcType=VARCHAR},
+      depname = #{depname,jdbcType=VARCHAR},
+      eventdate = #{eventdate,jdbcType=TIMESTAMP},
+      context = #{context,jdbcType=VARCHAR},
+      ext1 = #{ext1,jdbcType=VARCHAR},
+      depid = #{depid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -15,10 +15,9 @@ import com.mc.printer.server.entity.child.SavedDataEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.mapper.TbBranchMapper;
 import com.mc.printer.server.mapper.TbSavedataMapper;
-import com.mc.printer.server.service.branch.BranchService;
-import static com.mc.printer.server.service.emp.LoginService.copier;
 import com.mc.printer.server.service.pkkey.PkgeneratorServiceIF;
 import com.mc.printer.server.utils.DateHelper;
+import com.mc.printer.server.utils.Pager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,9 +47,9 @@ public class DataSearchService implements DataServiceIF {
     TbSavedataMapper mapper;
 
     @Override
-    public CommFindEntity<DataSearchResult> findAllCondition(DataSearchEntity conditionEntity) {
+    public CommFindEntity<DataSearchResult> findAllCondition(DataSearchEntity conditionEntity, Pager page) {
         log.info("try to find all data by findAllCondition");
-        CommFindEntity<DataSearchResult> result = new CommFindEntity<DataSearchResult>();
+        CommFindEntity<DataSearchResult> result = new CommFindEntity<>();
         TbSavedataExample example = new TbSavedataExample();
 
         TbSavedataExample.Criteria crite = example.createCriteria();
@@ -75,10 +74,19 @@ public class DataSearchService implements DataServiceIF {
             }
         }
 
+        if (page != null) {
+            /*分页*/
+            int count = mapper.countByExample(example);
+            log.debug("count is " + count);
+            page.setCount(count);
+            example.setLimit(page.getPageSize());
+            example.setOffset(page.getStartDataIndex());
+        }
         example.setOrderByClause("submitdate DESC");
 
-        List<TbSavedata> all = mapper.selectByExample(example);
         List<SavedDataEntity> allEntity = new ArrayList();
+
+        List<TbSavedata> all = mapper.selectByExample(example);
         if (all != null) {
             log.info("found result data entity:" + all.size());
             for (TbSavedata empl : all) {
@@ -129,6 +137,37 @@ public class DataSearchService implements DataServiceIF {
         allData.addAll(map.values());
         result.setResult(allData);
         return result;
+    }
+    
+    @Override
+    public void deleteAllCondition(DataSearchEntity conditionEntity) {
+        log.info("try to delete all data by conditionEntity:"+conditionEntity);
+        CommFindEntity<DataSearchResult> result = new CommFindEntity<>();
+        TbSavedataExample example = new TbSavedataExample();
+
+        TbSavedataExample.Criteria crite = example.createCriteria();
+
+        if (conditionEntity != null) {
+            if (conditionEntity.getDanjuName() != null && !conditionEntity.getDanjuName().trim().equals("")) {
+                crite.andKeyLike(conditionEntity.getDanjuName() + "%");
+            }
+            if (conditionEntity.getKey() != null && !conditionEntity.getKey().trim().equals("")) {
+                crite.andKeyLike("%" + conditionEntity.getKey() + "%");
+            }
+            if (conditionEntity.getBranchid() != null && conditionEntity.getBranchid() > 0) {
+                crite.andBranchidEqualTo(conditionEntity.getBranchid());
+            }
+
+            if (conditionEntity.getStartDate() != null && conditionEntity.getEndDate() != null) {
+                crite.andSubmitdateBetween(conditionEntity.getStartDate(), conditionEntity.getEndDate());
+            } else if (conditionEntity.getStartDate() != null) {
+                crite.andSubmitdateGreaterThanOrEqualTo(conditionEntity.getStartDate());
+            } else if (conditionEntity.getEndDate() != null) {
+                crite.andSubmitdateLessThanOrEqualTo(conditionEntity.getEndDate());
+            }
+        }
+        mapper.deleteByExample(example);
+        log.debug("delete done.");
     }
 
 }

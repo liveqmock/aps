@@ -9,7 +9,7 @@ package com.mc.printer.server.service.saveddata;
 import com.mc.printer.server.entity.child.DataSearchEntity;
 import com.mc.printer.server.entity.child.DataSearchResult;
 import com.mc.printer.server.entity.common.CommFindEntity;
-import com.mc.printer.server.service.common.CommServiceIF;
+import com.mc.printer.server.utils.Pager;
 
 /**
  *
@@ -17,5 +17,7 @@ import com.mc.printer.server.service.common.CommServiceIF;
  */
 public interface DataServiceIF{
     
-    public CommFindEntity<DataSearchResult> findAllCondition(DataSearchEntity conditionEntity);
+    public CommFindEntity<DataSearchResult> findAllCondition(DataSearchEntity conditionEntity, Pager page);
+    
+    public void deleteAllCondition(DataSearchEntity conditionEntity);
 }

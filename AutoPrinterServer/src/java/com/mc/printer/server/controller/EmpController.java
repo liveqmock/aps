@@ -9,7 +9,9 @@ import com.mc.printer.server.controller.common.ComResponse;
 import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.service.common.CommServiceIF;
+import com.mc.printer.server.service.log.LogServiceIF;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class EmpController {
 
     private static final Log log = LogFactory.getLog(EmpController.class);
+
+    @Resource
+    private LogServiceIF logService;
 
     @Autowired
     @Qualifier("empService")
@@ -66,6 +71,7 @@ public class EmpController {
             log.info("save result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
             comResponse.setResponseEntity(bean);
+            logService.saveLog("新建用户:" + bean.getName());
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);
@@ -84,6 +90,7 @@ public class EmpController {
             int result = comService.deleteDataByKey(id);
             log.info("delete result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
+            logService.saveLog("删除用户ID:" + id);
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);
@@ -103,6 +110,7 @@ public class EmpController {
             log.info("update result:" + result);
             comResponse.setResponseStatus(ComResponse.STATUS_OK);
             comResponse.setResponseEntity(bean);
+            logService.saveLog("更新用户:" + bean.getId());
         } catch (Exception e) {
             log.equals(e);
             comResponse.setResponseStatus(ComResponse.STATUS_FAIL);

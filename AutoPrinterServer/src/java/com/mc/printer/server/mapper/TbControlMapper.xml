@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mc.printer.server.mapper.TbControlMapper" >
+  <resultMap id="BaseResultMap" type="com.mc.printer.server.entity.TbControl" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="branchname" property="branchname" jdbcType="VARCHAR" />
+    <result column="guidename" property="guidename" jdbcType="VARCHAR" />
+    <result column="buttonname" property="buttonname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, branchname, guidename, buttonname, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.mc.printer.server.entity.TbControlExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from public.tb_control
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null and limit>=0" >
+      limit #{limit} offset #{offset}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.tb_control
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.tb_control
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mc.printer.server.entity.TbControlExample" >
+    delete from public.tb_control
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mc.printer.server.entity.TbControl" >
+    insert into public.tb_control (id, branchname, guidename, 
+      buttonname, status)
+    values (#{id,jdbcType=BIGINT}, #{branchname,jdbcType=VARCHAR}, #{guidename,jdbcType=VARCHAR}, 
+      #{buttonname,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mc.printer.server.entity.TbControl" >
+    insert into public.tb_control
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="branchname != null" >
+        branchname,
+      </if>
+      <if test="guidename != null" >
+        guidename,
+      </if>
+      <if test="buttonname != null" >
+        buttonname,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="branchname != null" >
+        #{branchname,jdbcType=VARCHAR},
+      </if>
+      <if test="guidename != null" >
+        #{guidename,jdbcType=VARCHAR},
+      </if>
+      <if test="buttonname != null" >
+        #{buttonname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mc.printer.server.entity.TbControlExample" resultType="java.lang.Integer" >
+    select count(*) from public.tb_control
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update public.tb_control
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.branchname != null" >
+        branchname = #{record.branchname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.guidename != null" >
+        guidename = #{record.guidename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buttonname != null" >
+        buttonname = #{record.buttonname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update public.tb_control
+    set id = #{record.id,jdbcType=BIGINT},
+      branchname = #{record.branchname,jdbcType=VARCHAR},
+      guidename = #{record.guidename,jdbcType=VARCHAR},
+      buttonname = #{record.buttonname,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mc.printer.server.entity.TbControl" >
+    update public.tb_control
+    <set >
+      <if test="branchname != null" >
+        branchname = #{branchname,jdbcType=VARCHAR},
+      </if>
+      <if test="guidename != null" >
+        guidename = #{guidename,jdbcType=VARCHAR},
+      </if>
+      <if test="buttonname != null" >
+        buttonname = #{buttonname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mc.printer.server.entity.TbControl" >
+    update public.tb_control
+    set branchname = #{branchname,jdbcType=VARCHAR},
+      guidename = #{guidename,jdbcType=VARCHAR},
+      buttonname = #{buttonname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

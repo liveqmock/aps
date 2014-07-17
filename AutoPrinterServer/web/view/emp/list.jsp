@@ -12,11 +12,11 @@
                data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/emp/',method:'get',toolbar:'#tb'">
             <thead>
                 <tr>
-                    <th data-options="field:'id',width:80">ID</th>
+                    <th data-options="field:'id',width:50">ID</th>
                     <th data-options="field:'name',width:80,align:'center'">用户名</th>
                     <th data-options="field:'role',width:100,align:'center'" formatter="formatRole">角色</th>
                     <th data-options="field:'department',width:80,align:'center'" formatter="formatDep">部门</th>
-                    <th data-options="field:'descms',width:240,align:'center'">说明</th>
+                    <th data-options="field:'descms',width:240,align:'left'">说明</th>
                 </tr>
             </thead>
         </table>
@@ -43,7 +43,7 @@
             function updateOne() {
                 var row = $('#tt').datagrid('getSelected');
                 if (row) {
-                    window.location = '<%=root%>/view/emp/edit.jsp?id=' + row.id;
+                    window.location = '<%=root%>/view/emp/edit.jsp?id=' + row.id+"&did="+row.depid;
                 }
             }
 

@@ -50,6 +50,9 @@ public class BranchService implements CommServiceIF<TbBranch, Long> {
             if (conditionEntity.getName() != null) {
                 crite.andNameEqualTo(conditionEntity.getName());
             }
+             if (conditionEntity.getAddress() != null) {
+                crite.andAddressEqualTo(conditionEntity.getAddress());
+            }
             if (conditionEntity.getStatus() != null) {
                 crite.andStatusEqualTo(conditionEntity.getStatus());
             }
@@ -104,10 +107,10 @@ public class BranchService implements CommServiceIF<TbBranch, Long> {
     
     @Override
     public int updateData(TbBranch bean) {
-        if (bean.getAddress() != null && !bean.getAddress().trim().equals("")) {
+        if (bean.getAddress() != null && !bean.getAddress().trim().equals("")&&bean.getName()!=null&&!bean.getName().trim().equals("")) {
             TbBranchExample example = new TbBranchExample();
             TbBranchExample.Criteria crite = example.createCriteria();
-            crite.andAddressEqualTo(bean.getAddress());
+            crite.andAddressEqualTo(bean.getAddress()).andNameEqualTo(bean.getName());
             List<TbBranch> ls = mapper.selectByExample(example);
             
             TbBranch beans = null;

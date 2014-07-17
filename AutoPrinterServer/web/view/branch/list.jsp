@@ -6,9 +6,9 @@
     </head>
     <body>
        	<h2>网点监控</h2>
-        <p>监控各个网点自助填单系统的在线/离线状态</p>
+        <p>监控各个网点自助填单系统的在线/离线状态, 只列出当前登录用户部门下面登记的填单机状态。</p>
         <div style="margin:20px 0;"></div>
-        <table class="easyui-datagrid" title="角色管理" id="tt" style="width:700px;height:400px"
+        <table class="easyui-datagrid" title="监控" id="tt" style="width:700px;height:400px"
                data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/branch/',method:'get',toolbar:'#tb'">
             <thead>
                 <tr>
@@ -31,11 +31,12 @@
             function formatStatus(value) {
                 if (value) {
                     if (value === 1) {
-                        return "running";
-                    } else {
-                        return "stop";
-                    }
+                        return "<font color='green'>●</font>";
+                    } 
                 }
+                 if (value === 0) {
+                        return "<font color='red'>●</font>";
+                    }
             }
             function submitForm() {
                 $("#tt").datagrid("reload");

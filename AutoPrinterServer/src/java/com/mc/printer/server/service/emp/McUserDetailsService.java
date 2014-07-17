@@ -3,9 +3,12 @@
  */
 package com.mc.printer.server.service.emp;
 
+import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.LoginUserDetails;
+import com.mc.printer.server.service.log.LogServiceIF;
 import com.mc.printer.server.utils.ToolHelper;
 import com.mc.printer.server.utils.UnicodeConverter;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -34,6 +37,9 @@ public class McUserDetailsService extends AbstractUserDetailsAuthenticationProvi
 
     private SaltSource saltSource;
 
+    @Resource
+    private LogServiceIF logService;
+
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         Object salt = null;
@@ -51,7 +57,7 @@ public class McUserDetailsService extends AbstractUserDetailsAuthenticationProvi
         String presentedPassword = new String(ToolHelper.encryptBASE64(authentication.getCredentials().toString().getBytes()));
 
         if (!presentedPassword.equals(userDetails.getPassword())) {
-            log.error("Authentication failed: password does not match stored value,userDetails:"+userDetails.getPassword()+",presentedPassword:"+presentedPassword);
+            log.error("Authentication failed: password does not match stored value,userDetails:" + userDetails.getPassword() + ",presentedPassword:" + presentedPassword);
             throw new BadCredentialsException("Bad credentials:" + userDetails);
         }
 
@@ -70,6 +76,10 @@ public class McUserDetailsService extends AbstractUserDetailsAuthenticationProvi
             String password = (String) authentication.getCredentials();
             loadedUser = getUserDetailsService().loadUserByUsername(realUserName, password);
             log.info(loadedUser.getUsername() + " logined.");
+            UserEntity user = loadedUser.getUserSessionEntity();
+            if(user!=null&&user.getDepartment()!=null){
+            logService.saveLog(user.getName(),user.getDepartment().getDepname(),user.getDepartment().getId(),"登录系统:" + loadedUser.getUsername());
+            }
         } catch (UsernameNotFoundException notFound) {
             throw notFound;
         } catch (Exception repositoryProblem) {

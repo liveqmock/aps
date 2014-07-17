@@ -23,46 +23,41 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LoginUserDetailsServiceImpl implements LoginUserDetailsService {
-    
+
     private static final Log log = LogFactory.getLog(LoginUserDetailsServiceImpl.class);
     @Resource
     LoginServiceIF loginService;
-    
+
     @Override
     public LoginUserDetails loadUserByUsername(String username, String password) throws UsernameNotFoundException {
-        
+
         UserEntity userSessionEntity = loginService.login(username, new String(ToolHelper.encryptBASE64(password.getBytes())));
-        
+
         if (userSessionEntity == null || userSessionEntity.getName() == null) {
             log.error("user entity is null.");
             return null;
         } else {
             Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
-            int roleId = userSessionEntity.getRole().getRoleid();
-            
-            log.debug("get role id:" + roleId);
-            
-            if (roleId == Constants.ROLE_ADMIN) { //为管理员的时候
-                GrantedAuthorityImpl auth2 = new GrantedAuthorityImpl("ROLE_ADMIN");
-                GrantedAuthorityImpl auth1 = new GrantedAuthorityImpl("ROLE_BRANCH");
-                GrantedAuthorityImpl auth3 = new GrantedAuthorityImpl("ROLE_USER");
+            String ext1 = userSessionEntity.getRole().getExt1();
+
+            log.debug("get role:" + ext1);
+            if (ext1 != null) {
+                String[] roles = ext1.split(",");
                 
-                log.info("add Authority:ROLE_ADMIN,ROLE_BRANCH,ROLE_USER");
-                auths.add(auth2);
-                auths.add(auth1);
-                auths.add(auth3);
-            } else if (roleId == Constants.ROLE_BRANCH) {
-                GrantedAuthorityImpl auth2 = new GrantedAuthorityImpl("ROLE_BRANCH");
-                auths.add(auth2);
-                log.info("add Authority:ROLE_BRANCH");
-            } else if (roleId == Constants.ROLE_USER) {
-                GrantedAuthorityImpl auth1 = new GrantedAuthorityImpl("ROLE_USER");
-                auths.add(auth1);
-                log.info("add Authority:ROLE_USER");
+                for(String role:roles){
+                    for(int i=0;i<Constants.ROLE_PAGES_CN.length;i++){
+                      if(role.equals(Constants.ROLE_PAGES_CN[i])){
+                         GrantedAuthorityImpl auth2 = new GrantedAuthorityImpl(Constants.ROLE_PAGES[i]);
+                         log.info("add Authority:"+Constants.ROLE_PAGES[i]+",cn_name:"+Constants.ROLE_PAGES_CN[i]);
+                         auths.add(auth2);
+                      }
+                    }
+                }
+                
             }
             return new LoginUserDetails(userSessionEntity, new ArrayList<GrantedAuthority>(auths));
         }
-        
+
     }
-    
+
 }
