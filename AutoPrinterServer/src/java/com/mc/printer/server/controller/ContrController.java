@@ -23,8 +23,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -127,17 +129,24 @@ public class ContrController {
         return controlService.updateControl(tbauth);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "updatebranch/{id}")
+    @RequestMapping(method = RequestMethod.POST, value = "updatebranch/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    int updateStatus(@RequestParam(value = "branch") String branch, @PathVariable Long id) {
+    int updateStatus(@RequestBody HashMap branch, @PathVariable Long id) {
         log.debug("branch:" + branch);
         try {
 //            if (branch != null) {
-//                branch = new String(branch.getBytes("ISO-8859-1"), "UTF-8");
+//                branch = new String(branch.getBytes("ISO-8859-1"), "gb2312");
 //            }
+
+            String branchName="";
+            if(branch!=null){
+             Object obj = branch.get("branch");
+             branchName = obj==null?"":obj.toString();
+            }
+            
             TbControl tbauth = new TbControl();
             tbauth.setId(id);
-            tbauth.setBranchname(branch);
+            tbauth.setBranchname(branchName);
             logService.saveLog("更新业务适用网点信息.业务ID：" + id + ",网点:" + branch);
             return controlService.updateControl(tbauth);
         } catch (Exception ex) {

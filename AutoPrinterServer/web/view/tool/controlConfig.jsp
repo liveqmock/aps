@@ -88,10 +88,9 @@
                     }
                 }
 
-//                var params = {
-//                    "rolename": $("#rolename").val(),
-//                    "ext1": optionAll
-//                };
+                var params = {
+                    "branch": optionAll
+                };
                 var successFun = function(data, textStatus) {
                     window.location = '<%=root%>/view/tool/control.jsp';
                 };
@@ -100,8 +99,8 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<%=root%>/service/client/cont/updatebranch/"+${data.id}+"?branch="+optionAll,
-//                    data: JSON.stringify(params),
+                    url: "<%=root%>/service/client/cont/updatebranch/"+${data.id},
+                    data: JSON.stringify(params),
                     async: true,
                     dataType: 'json',
                     success: successFun,

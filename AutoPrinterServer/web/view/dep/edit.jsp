@@ -5,7 +5,7 @@
     String pid = request.getParameter("pid");
     String ext1 = request.getParameter("ext1");
     if (ext1 != null && !ext1.trim().equals("")) {
-        ext1 = new String(ext1.getBytes("ISO-8859-1"), "UTF-8");
+//        ext1 = new String(ext1.getBytes("ISO-8859-1"), "UTF-8");
         String[] extArray = ext1.split(",");
         List ls = Arrays.asList(extArray);
         request.setAttribute("extarray", ls);
