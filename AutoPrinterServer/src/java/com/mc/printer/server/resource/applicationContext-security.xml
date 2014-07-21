@@ -25,6 +25,7 @@
         <security:intercept-url pattern="/service/admin/deploy" access="ROLE_DEPLOY"  />
         <security:intercept-url pattern="/service/admin/branch" access="ROLE_BRANCH"  />
         <security:intercept-url pattern="/service/admin/search" access="ROLE_SEARCH"  />
+        <security:intercept-url pattern="/service/admin/auth" access="ROLE_AUTH"  />
         <security:intercept-url pattern="/service/admin/control" access="ROLE_CONTROL"  />
         <!-- session-management是针对session的管理. 这里可以不配置. 如有需求可以配置. -->
         <!-- id登陆唯一. 后登陆的账号会挤掉第一次登陆的账号 error-if-maximum-exceeded="true" 禁止2次登陆; 

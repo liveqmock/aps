@@ -10,6 +10,7 @@ import com.mc.printer.server.entity.TbAuthExample;
 import com.mc.printer.server.entity.common.CommFindEntity;
 import com.mc.printer.server.mapper.TbAuthMapper;
 import com.mc.printer.server.service.pkkey.PkgeneratorServiceIF;
+import com.mc.printer.server.utils.Pager;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
@@ -24,11 +25,11 @@ import org.springframework.stereotype.Service;
 public class AuthService implements AuthServiceIF {
 
     private static final Log log = LogFactory.getLog(AuthService.class);
-    
-    public static final int STATUS_APPROVED=1;
-    
-    public static final int STATUS_SUBMITED=2;
-    
+
+    public static final int STATUS_APPROVED = 1;
+
+    public static final int STATUS_SUBMITED = 2;
+
     @Resource
     TbAuthMapper mapper;
 
@@ -51,29 +52,40 @@ public class AuthService implements AuthServiceIF {
     }
 
     @Override
-    public CommFindEntity<TbAuth> findAuth(TbAuth tbauth) {
+    public CommFindEntity<TbAuth> findAuth(TbAuth tbauth,Pager page) {
         log.info("findAuth:" + tbauth);
         TbAuthExample example = new TbAuthExample();
         CommFindEntity<TbAuth> result = new CommFindEntity<>();
         TbAuthExample.Criteria crit = example.createCriteria();
-        if (tbauth.getId() != null && tbauth.getId() > 0) {
-            crit.andIdEqualTo(tbauth.getId());
+        if (tbauth != null) {
+            if (tbauth.getId() != null && tbauth.getId() > 0) {
+                crit.andIdEqualTo(tbauth.getId());
+            }
+            if (tbauth.getUserid() != null) {
+                crit.andUseridEqualTo(tbauth.getUserid());
+            }
+            if (tbauth.getPasswd() != null) {
+                crit.andPasswdEqualTo(tbauth.getPasswd());
+            }
+            if (tbauth.getContext() != null) {
+                crit.andContextLike("%" + tbauth.getContext() + "%");
+            }
+            if (tbauth.getStatus() != null) {
+                crit.andStatusEqualTo(tbauth.getStatus());
+            }
+            if (tbauth.getBranchname() != null && !tbauth.getBranchname().trim().equals("")) {
+                crit.andBranchnameLike(tbauth.getBranchname() + "%");
+            }
         }
-        if (tbauth.getUserid() != null) {
-            crit.andUseridEqualTo(tbauth.getUserid());
+       if (page != null) {
+            /*分页*/
+            int count = mapper.countByExample(example);
+            log.debug("count is " + count);
+            page.setCount(count);
+            example.setLimit(page.getPageSize());
+            example.setOffset(page.getStartDataIndex());
         }
-        if (tbauth.getPasswd() != null) {
-            crit.andPasswdEqualTo(tbauth.getPasswd());
-        }
-        if (tbauth.getContext() != null) {
-            crit.andContextLike("%" + tbauth.getContext() + "%");
-        }
-        if (tbauth.getStatus() != null) {
-            crit.andStatusEqualTo(tbauth.getStatus());
-        }
-        if (tbauth.getBranchname()!= null&&!tbauth.getBranchname().trim().equals("")) {
-            crit.andBranchnameLike(tbauth.getBranchname()+"%");
-        }
+        
         example.setOrderByClause("id,status DESC");
         List<TbAuth> tbAuths = mapper.selectByExample(example);
         if (tbAuths != null) {
@@ -109,7 +121,7 @@ public class AuthService implements AuthServiceIF {
     @Override
     public int updatedAuth(TbAuth tbah) {
         log.info("update user." + tbah.getUserid());
-        return mapper.updateByPrimaryKey(tbah);
+        return mapper.updateByPrimaryKeySelective(tbah);
     }
 
     @Override

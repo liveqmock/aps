@@ -32,6 +32,7 @@
                         <li><a href="<%=root%>/service/admin/control" target="contextframe">业务控制</a></li>
                         <li><a href="<%=root%>/service/admin/video/deploy" target="contextframe">视频广告</a></li>
                         <li><a href="<%=root%>/service/admin/search" target="contextframe">综合查询</a></li>
+                        <li><a href="<%=root%>/service/admin/auth" target="contextframe">认证用户</a></li>
                         <li><a href="<%=root%>/service/admin/dep" target="contextframe">部门管理</a></li>
                         <li><a href="<%=root%>/service/admin/role" target="contextframe">角色管理</a></li>
                         <li><a href="<%=root%>/service/admin/user" target="contextframe">用户管理</a></li>

@@ -8,6 +8,7 @@ package com.mc.printer.server.service.auth;
 
 import com.mc.printer.server.entity.TbAuth;
 import com.mc.printer.server.entity.common.CommFindEntity;
+import com.mc.printer.server.utils.Pager;
 
 /**
  *
@@ -17,7 +18,7 @@ public interface AuthServiceIF {
     
     public TbAuth findLogin(String userId,String passwd);
 
-    public CommFindEntity<TbAuth> findAuth(TbAuth tbauth);
+    public CommFindEntity<TbAuth> findAuth(TbAuth tbauth,Pager page);
     
     public int saveAuth(TbAuth tbah) throws Exception;
     
