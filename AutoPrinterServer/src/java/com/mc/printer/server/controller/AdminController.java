@@ -764,4 +764,8 @@ public class AdminController {
         return new ModelAndView("tool/control");
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/admin/auth")
+    public ModelAndView i() {
+        return new ModelAndView("branch/auth");
+    }
 }

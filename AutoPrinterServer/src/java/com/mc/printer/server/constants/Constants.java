@@ -21,8 +21,8 @@ public class Constants {
     public final static int FLAG_STATUS_SLEEP = 3;
 
     /*下面是和权限绑定在一起,请查看applicationContext-security.xml*/
-    public final static String[] ROLE_PAGES=new String[]{"ROLE_ROLE","ROLE_DEP","ROLE_USER","ROLE_TOOL","ROLE_DEPLOY","ROLE_BRANCH","ROLE_VIDEO","ROLE_SEARCH","ROLE_CONTROL","SYSTEM_SEARCH"};
-    public final static String[] ROLE_PAGES_CN=new String[]{"角色管理","部门管理","用户管理","制单工具","推送部署","网点监控","视频推送","综合查询","业务控制","系统查询"};
+    public final static String[] ROLE_PAGES=new String[]{"ROLE_ROLE","ROLE_DEP","ROLE_USER","ROLE_TOOL","ROLE_DEPLOY","ROLE_BRANCH","ROLE_VIDEO","ROLE_SEARCH","ROLE_CONTROL","SYSTEM_SEARCH","ROLE_AUTH"};
+    public final static String[] ROLE_PAGES_CN=new String[]{"角色管理","部门管理","用户管理","制单工具","推送部署","网点监控","视频推送","综合查询","业务控制","系统查询","认证用户"};
     
     
     /*toppage 返回状态*/
