@@ -8,21 +8,22 @@
     </head>
 
     <body>
-        <table border="0"
-               cellpadding="0" cellspacing="0" width="100%">
-           <tbody>
-                <tr>
-                    <td class="sun-lightblue" align="left"> <font size="2" >服务端版本:<%=Constants.VERSION%></font></td>
-                    <td class="sun-lightblue" align="right"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="sun-darkblue" >
-                        <h2 >欢迎使用银行自助填单管理系统</h2>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
+        <div id="topinfo">
+            <table border="0"
+                   cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td class="sun-lightblue" align="left"> <font size="2" >服务端版本:<%=Constants.VERSION%></font></td>
+                        <td class="sun-lightblue" align="right"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="sun-darkblue" >
+                            <h2 >欢迎使用银行自助填单管理系统</h2>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <c:if test="${type=='1'}">
             <div class="demo-info">
                 <div class="demo-tip icon-tip"></div>
@@ -93,7 +94,7 @@
                                  collapsible="true" minimizable="true" maximizable=true>-->
 
                     <div style="padding: 10px 0 0px 10px" align="center" >
-                        <form id="ff" action="<%=root%>/j_spring_security_check" method="post">
+                        <form id="ff" action="<%=root%>/j_spring_security_check" method="post" target="_parent">
                             <table>
                                 <tr>
                                     <td>用户名:</td>
@@ -114,6 +115,12 @@
         </c:choose> 
 
         <script type="text/javascript">
+
+//            var frameid = parent.window.document;
+//
+//            if(frameid){
+//                $("#topinfo").css('display','none');
+//            }
 
             function submitForm() {
                 var params = {
@@ -136,9 +143,8 @@
                     error: errorFun,
                     contentType: "application/json"
                 });
-                
+
                 window.location = '<%=root%>/';
- 
             }
         </script>
     </body>

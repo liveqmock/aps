@@ -23,4 +23,6 @@ public interface ControlServiceIF {
     public int updateControl(TbControl tbauth);
     
     public int deleteControl(Long id);
+    
+    public int deleteControl(TbControl tbauth);
 }

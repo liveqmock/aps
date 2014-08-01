@@ -33,14 +33,14 @@
         创建新的session,并把用户信息复制到新session中. -->
         <security:session-management
             session-fixation-protection="none">
-            <security:concurrency-control />
+            <security:concurrency-control expired-url="/view/expired.jsp" />
         </security:session-management>
 
         <!-- login-page:默认指定的登录页面. authentication-failure-url:出错后跳转页面. default-target-url:成功登陆后跳转页面 -->
         <security:form-login login-page="/service/toppage"
                              authentication-failure-url="/service/toppage?type=1" default-target-url="/service/main"  always-use-default-target="true" username-parameter="j_username" password-parameter="j_password" login-processing-url="/j_spring_security_check"/>
         <!-- logout-success-url:成功注销后跳转到的页面; -->
-        <security:logout logout-success-url="/service/toppage" />
+        <security:logout logout-success-url="/view/expired.jsp" />
         <security:http-basic />
 
     </security:http>

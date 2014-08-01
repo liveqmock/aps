@@ -6,7 +6,7 @@
     </head>
     <body>
        	<h2>角色管理</h2>
-        <p>角色的增加，修改，删除。角色标识用于控制系统中各个模块的权限.权限的配置请联系管理员.</p>
+        <p>角色的增加，修改，删除。角色标识用于控制系统中各个模块的权限.当拥有"系统查询"权限的时候，查询模块不受用户所在部门限制.</p>
         <div style="margin:20px 0;"></div>
         <table class="easyui-datagrid" title="角色管理" id="tt" style="width:700px;height:450px"
                data-options="rownumbers:true,singleSelect:true,url:'<%=root%>/service/role/',method:'get',toolbar:'#tb'">

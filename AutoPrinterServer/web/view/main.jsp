@@ -4,6 +4,7 @@
         <%@ include file="common.jsp"%>
     </head>
 
+    <div id="frameflag"></div>
     <body>
         <table border="0"
                cellpadding="0" cellspacing="0" width="100%">
@@ -26,16 +27,56 @@
                 <td valign="top" width="30%">
                     <div class="Head2 sun-verylightblue">系统管理</div>
                     <ul>
-                        <li><a href="<%=root%>/service/admin/branch" target="contextframe">网点监控</a></li>
-                        <li><a href="<%=root%>/service/admin/tool" target="contextframe">制单工具</a></li>
-                        <li><a href="<%=root%>/service/admin/deploy" target="contextframe">推送部署</a></li>
-                        <li><a href="<%=root%>/service/admin/control" target="contextframe">业务控制</a></li>
-                        <li><a href="<%=root%>/service/admin/video/deploy" target="contextframe">视频广告</a></li>
-                        <li><a href="<%=root%>/service/admin/search" target="contextframe">综合查询</a></li>
-                        <li><a href="<%=root%>/service/admin/auth" target="contextframe">认证用户</a></li>
-                        <li><a href="<%=root%>/service/admin/dep" target="contextframe">部门管理</a></li>
-                        <li><a href="<%=root%>/service/admin/role" target="contextframe">角色管理</a></li>
-                        <li><a href="<%=root%>/service/admin/user" target="contextframe">用户管理</a></li>
+                        <c:choose> 
+                            <c:when test="${fn:contains(user.role.ext1,'网点监控') or fn:contains(user.role.ext1,'系统查询')}">    
+                                <li><a href="<%=root%>/service/admin/branch" target="contextframe">网点监控</a></li> 
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'制单工具')}">    
+                                <li><a href="<%=root%>/service/admin/tool" target="contextframe">制单工具</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'推送部署')}">    
+                                <li><a href="<%=root%>/service/admin/deploy" target="contextframe">推送部署</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'业务控制')}">    
+                                <li><a href="<%=root%>/service/admin/control" target="contextframe">业务控制</a></li>
+                                </c:when> 
+                            </c:choose>                                 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'视频推送')}">    
+                                <li><a href="<%=root%>/service/admin/video/deploy" target="contextframe">视频广告</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'综合查询') or fn:contains(user.role.ext1,'系统查询')}">    
+                                <li><a href="<%=root%>/service/admin/search" target="contextframe">综合查询</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'认证用户')}">    
+                                <li><a href="<%=root%>/service/admin/auth" target="contextframe">认证用户</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'部门管理')}">    
+                                <li><a href="<%=root%>/service/admin/dep" target="contextframe">部门管理</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'角色管理')}">    
+                                <li><a href="<%=root%>/service/admin/role" target="contextframe">角色管理</a></li>
+                                </c:when> 
+                            </c:choose> 
+                            <c:choose> 
+                                <c:when test="${fn:contains(user.role.ext1,'用户管理')}">    
+                                <li><a href="<%=root%>/service/admin/user" target="contextframe">用户管理</a></li>
+                                </c:when> 
+                            </c:choose>                                 
                     </ul>
 
                 </td>
@@ -44,8 +85,5 @@
                 </td>
             </tr>
         </table>
-
-
-
     </body>
 </html>

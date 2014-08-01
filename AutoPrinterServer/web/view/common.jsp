@@ -5,6 +5,7 @@
     String root = request.getContextPath();
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 <link rel="stylesheet" type="text/css" href="<%=root%>/resources/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="<%=root%>/resources/themes/icon.css">	
 <link rel="stylesheet" type="text/css" href="<%=root%>/resources/document.css">

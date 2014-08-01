@@ -61,6 +61,10 @@ public class AdminController {
     @Qualifier("empService")
     private CommServiceIF<UserEntity, Long> comService;
 
+    @Autowired
+    @Qualifier("branchService")
+    private CommServiceIF<TbBranch, Long> branchService;
+
     @Resource
     private AdminServiceIF adminServie;
 
@@ -210,6 +214,7 @@ public class AdminController {
                             TbRole role = session.getRole();
                             long depid = session.getDepid();
                             List<Long> depArray = new ArrayList();
+                            depArray.add(depid);//设置我的部门
 
                             boolean hasSearchAdmin = false;
                             if (role != null && role.getExt1().contains("系统查询")) {
@@ -321,6 +326,7 @@ public class AdminController {
                             TbRole role = session.getRole();
                             long depid = session.getDepid();
                             List<Long> depArray = new ArrayList();
+                            depArray.add(depid);//设置我的部门
 
                             boolean hasSearchAdmin = false;
                             if (role != null && role.getExt1().contains("系统查询")) {
@@ -438,7 +444,7 @@ public class AdminController {
             if (endDate != null && !endDate.equals("")) {
                 bean.setEndDate(DateHelper.getStringtoDate(endDate, "yyyy-MM-dd"));
             }
-
+            TbDepartment department = null;
             if (branch != null && !branch.equals("")) {
                 try {
                     bean.setBranchid(Long.valueOf(branch));
@@ -447,13 +453,14 @@ public class AdminController {
                 }
             } else {
                 Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
                 if (principal != null) {
                     try {
                         if (principal instanceof LoginUserDetails) {
                             LoginUserDetails user = (LoginUserDetails) principal;
                             log.info("Got UserDetails object." + user.getUsername());
-                            UserEntity session = user.getUserSessionEntity();
-                            TbDepartment department = session.getDepartment();
+                            UserEntity session = session = user.getUserSessionEntity();
+                            department = session.getDepartment();
                             TbRole role = session.getRole();
 
                             if (role != null) {
@@ -477,6 +484,18 @@ public class AdminController {
                 if (hasSearchAdmin) {
 
                     data = dataSearchService.findAllCondition(bean, pager);
+                } else {
+                    if (department != null) {
+
+                        TbBranch conditionEntity = new TbBranch();
+                        conditionEntity.setName(department.getDepname());
+                        CommFindEntity<TbBranch> ls = branchService.findAll(conditionEntity);
+                        if (ls != null && ls.getResult()!=null && ls.getResult().size()>0) {
+                            List<TbBranch> branchArray = ls.getResult();
+                            bean.setBranchid(branchArray.get(0).getId());
+                            data = dataSearchService.findAllCondition(bean, pager);
+                        }
+                    }
                 }
             } else {
 

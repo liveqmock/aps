@@ -5,6 +5,7 @@
  */
 package com.mc.printer.server.service.auth;
 
+import com.mc.printer.server.constants.Constants;
 import com.mc.printer.server.entity.TbAuth;
 import com.mc.printer.server.entity.TbAuthExample;
 import com.mc.printer.server.entity.common.CommFindEntity;
@@ -40,7 +41,7 @@ public class AuthService implements AuthServiceIF {
     public TbAuth findLogin(String userId, String passwd) {
         log.info("login user:" + userId);
         TbAuthExample example = new TbAuthExample();
-        example.createCriteria().andUseridEqualTo(userId).andPasswdEqualTo(passwd);
+        example.createCriteria().andUseridEqualTo(userId).andPasswdEqualTo(passwd).andStatusEqualTo(Constants.FLAG_STATUS_ACTIVE);
         List<TbAuth> tbAuths = mapper.selectByExample(example);
 
         if (tbAuths != null && tbAuths.size() > 0) {

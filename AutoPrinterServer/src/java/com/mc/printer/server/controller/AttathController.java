@@ -105,51 +105,51 @@ public class AttathController {
                     /*button status更新到数据库中*/
                     if (oringianlName.endsWith(Constants.GUIDE_SUFFIX)) {
                         if (ufiles.exists()) {
-                            ZipFile zipFile = new ZipFile(ufiles);
-
-                            ZipEntry xmlEntry = null;
-                            Enumeration<? extends ZipEntry> entrys = zipFile.entries();
-                            while (entrys.hasMoreElements()) {
-                                ZipEntry entry = entrys.nextElement();
-                                String name = entry.getName();
-                                if (!name.startsWith(TEMP_DIR)) {
-                                    continue;
-                                }
-
-                                if (name.endsWith(".xml")) {
-                                    xmlEntry = entry;
-                                    break;
-                                }
-
-                            }
-
-                            log.debug("read guide xml:" + xmlEntry);
-
-                            if (xmlEntry != null) {
-                                try (InputStream zipInputStream = zipFile.getInputStream(xmlEntry)) {
-                                    GuideBean guide = read(zipInputStream, GuideBean.class);
-                                    List<GuideCompBean> guideArray = guide.getElements();
-                                    String guideName = guide.getGuideName();
-                                    if (guideArray != null) {
-                                        int k = 0;
-                                        for (GuideCompBean com : guideArray) {
-                                            String type = com.getType();
-                                            String buttonName = com.getText();
-                                            boolean control = com.isRemoteControl();
-                                            if (type.equals("Button") && control) {
-                                                TbControl tbauth = new TbControl();
-//                                                tbauth.setBranchname("");
-                                                tbauth.setButtonname(buttonName);
-                                                tbauth.setGuidename(guideName);
-                                                controlService.saveControl(tbauth);
-                                                k++;
-                                            }
-                                        }
-                                        log.debug("finish insert to control table. total:" + k);
-                                    } else {
-                                        log.debug("guideArray is null");
+                            try (ZipFile zipFile = new ZipFile(ufiles)) {
+                                ZipEntry xmlEntry = null;
+                                Enumeration<? extends ZipEntry> entrys = zipFile.entries();
+                                while (entrys.hasMoreElements()) {
+                                    ZipEntry entry = entrys.nextElement();
+                                    String name = entry.getName();
+                                    if (!name.startsWith(TEMP_DIR)) {
+                                        continue;
                                     }
-                                    zipInputStream.close();
+                                    
+                                    if (name.endsWith(".xml")) {
+                                        xmlEntry = entry;
+                                        break;
+                                    }
+                                    
+                                }
+                                
+                                log.debug("read guide xml:" + xmlEntry);
+                                
+                                if (xmlEntry != null) {
+                                    try (InputStream zipInputStream = zipFile.getInputStream(xmlEntry)) {
+                                        GuideBean guide = read(zipInputStream, GuideBean.class);
+                                        List<GuideCompBean> guideArray = guide.getElements();
+                                        String guideName = guide.getGuideName();
+                                        if (guideArray != null) {
+                                            int k = 0;
+                                            for (GuideCompBean com : guideArray) {
+                                                String type = com.getType();
+                                                String buttonName = com.getText();
+                                                boolean control = com.isRemoteControl();
+                                                if (type.equals("Button") && control) {
+                                                    TbControl tbauth = new TbControl();
+//                                                tbauth.setBranchname("");
+                                                    tbauth.setButtonname(buttonName);
+                                                    tbauth.setGuidename(guideName);
+                                                    controlService.saveControl(tbauth);
+                                                    k++;
+                                                }
+                                            }
+                                            log.debug("finish insert to control table. total:" + k);
+                                        } else {
+                                            log.debug("guideArray is null");
+                                        }
+                                        zipInputStream.close();
+                                    }
                                 }
                             }
 
@@ -205,8 +205,69 @@ public class AttathController {
                     for (File f : ls) {
                         if (f.getName().equals(name)) {
                             try {
+
+                                List<TbControl> deleteArray = new ArrayList();
+
+                                /*重新读取这个文件，删除在数据库中的业务*/
+                                if (f.getName().toLowerCase().endsWith(Constants.GUIDE_SUFFIX)) {
+
+                                    try (ZipFile zipFile = new ZipFile(f)) {
+                                        ZipEntry xmlEntry = null;
+                                        Enumeration<? extends ZipEntry> entrys = zipFile.entries();
+                                        while (entrys.hasMoreElements()) {
+                                            ZipEntry entry = entrys.nextElement();
+                                            String nameentry = entry.getName();
+                                            if (!nameentry.startsWith(TEMP_DIR)) {
+                                                continue;
+                                            }
+                                            
+                                            if (nameentry.endsWith(".xml")) {
+                                                xmlEntry = entry;
+                                                break;
+                                            }
+                                            
+                                        }
+                                        
+                                        log.debug("read guide xml:" + xmlEntry);
+                                        
+                                        if (xmlEntry != null) {
+                                            try (InputStream zipInputStream = zipFile.getInputStream(xmlEntry)) {
+                                                GuideBean guide = read(zipInputStream, GuideBean.class);
+                                                List<GuideCompBean> guideArray = guide.getElements();
+                                                String guideName = guide.getGuideName();
+                                                if (guideArray != null) {
+                                                    for (GuideCompBean com : guideArray) {
+                                                        String type = com.getType();
+                                                        String buttonName = com.getText();
+                                                        boolean control = com.isRemoteControl();
+                                                        if (type.equals("Button") && control) {
+                                                            TbControl tbauth = new TbControl();
+//                                                tbauth.setBranchname("");
+                                                            tbauth.setButtonname(buttonName);
+                                                            tbauth.setGuidename(guideName);
+                                                            deleteArray.add(tbauth);
+                                                        }
+                                                    }
+                                                } else {
+                                                    log.debug("guideArray is null");
+                                                }
+                                                zipInputStream.close();
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+
                                 f.delete();
                                 log.debug("delete file sucessfully.");
+
+                                if (deleteArray.size() > 0) {
+                                    for (TbControl target : deleteArray) {
+                                        log.debug("delete control:" + target);
+                                        controlService.deleteControl(target);
+                                    }
+                                }
+
                             } catch (Exception e) {
                                 log.error(e);
                             }
@@ -220,7 +281,7 @@ public class AttathController {
         } catch (Exception ex) {
             log.error(ex);
         }
-        logService.saveLog("删除模块："+name);
+        logService.saveLog("删除模块：" + name);
         return checkfil(request);
     }
 
@@ -356,7 +417,7 @@ public class AttathController {
 
         }
 
-        logService.saveLog("删除视频:"+name);
+        logService.saveLog("删除视频:" + name);
         return checkfilv(request);
     }
 

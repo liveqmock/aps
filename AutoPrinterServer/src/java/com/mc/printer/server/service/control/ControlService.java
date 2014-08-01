@@ -43,13 +43,13 @@ public class ControlService implements ControlServiceIF {
             TbControlExample.Criteria crit = example.createCriteria();
             if (tbauth.getGuidename() != null && !tbauth.getGuidename().trim().equals("")) {
                 crit.andGuidenameEqualTo(tbauth.getGuidename());
-            } 
+            }
             if (tbauth.getBranchname() != null && !tbauth.getBranchname().trim().equals("")) {
                 crit.andBranchnameLike("%" + tbauth.getBranchname() + "%");
-            } 
+            }
             if (tbauth.getButtonname() != null && !tbauth.getButtonname().trim().equals("")) {
                 crit.andButtonnameEqualTo(tbauth.getButtonname());
-            } 
+            }
             if (tbauth.getStatus() != null) {
                 crit.andStatusEqualTo(tbauth.getStatus());
             }
@@ -110,6 +110,35 @@ public class ControlService implements ControlServiceIF {
     public int deleteControl(Long id) {
         log.info("delete control:" + id);
         return mapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int deleteControl(TbControl tbauth) {
+        log.info("delete control:" + tbauth);
+        TbControlExample example = new TbControlExample();
+        boolean haveCondition = false;
+        if (tbauth != null) {
+            TbControlExample.Criteria crit = example.createCriteria();
+            if (tbauth.getGuidename() != null && !tbauth.getGuidename().trim().equals("")) {
+                crit.andGuidenameEqualTo(tbauth.getGuidename());
+                haveCondition = true;
+            }
+            if (tbauth.getBranchname() != null && !tbauth.getBranchname().trim().equals("")) {
+                crit.andBranchnameLike("%" + tbauth.getBranchname() + "%");
+                haveCondition = true;
+            }
+            if (tbauth.getButtonname() != null && !tbauth.getButtonname().trim().equals("")) {
+                crit.andButtonnameEqualTo(tbauth.getButtonname());
+                haveCondition = true;
+            }
+
+            if (haveCondition) {
+                log.info("start to delete control.");
+                mapper.deleteByExample(example);
+            }
+        }
+
+        return 0;
     }
 
     @Override
