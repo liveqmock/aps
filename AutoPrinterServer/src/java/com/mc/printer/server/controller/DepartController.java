@@ -2,7 +2,10 @@ package com.mc.printer.server.controller;
 
 import com.mc.printer.server.controller.common.ComResponse;
 import com.mc.printer.server.entity.TbDepartment;
+import com.mc.printer.server.entity.TbRole;
+import com.mc.printer.server.entity.child.UserEntity;
 import com.mc.printer.server.entity.common.CommFindEntity;
+import com.mc.printer.server.entity.common.LoginUserDetails;
 import com.mc.printer.server.service.common.CommServiceIF;
 import com.mc.printer.server.service.log.LogServiceIF;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +55,50 @@ public class DepartController {
     List findAll() {
         log.debug("findAll.");
         List all = new ArrayList();
-        getChild(0, all, 0);
+        long pid = 0;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal != null) {
+            try {
+                if (principal instanceof LoginUserDetails) {
+                    LoginUserDetails user = (LoginUserDetails) principal;
+                    log.info("Got UserDetails object." + user.getUsername());
+                    UserEntity session = user.getUserSessionEntity();
+                    TbRole role = session.getRole();
+
+                    pid = session.getDepid();
+
+                    if (role != null) {
+                        String ext = role.getExt1();
+                        if (ext != null && ext.contains("系统查询")) {
+                            pid = 0;
+                        }
+                    }
+
+                    List childarray = new ArrayList();
+                    getChild(pid, childarray, 0);
+
+                    TbDepartment department = session.getDepartment();
+                    if (department != null) {
+                        HashMap mapLevel1 = new HashMap();
+                        mapLevel1.put("id", department.getId());
+                        mapLevel1.put("text", department.getDepname());
+                        mapLevel1.put("desc", department.getDescms());
+                        mapLevel1.put("pid", department.getDepfather());
+                        mapLevel1.put("ext1", department.getExt1());
+                        if (childarray.size() > 0) {
+                            mapLevel1.put("children", childarray);
+                            mapLevel1.put("state", "closed");
+                        }
+
+                        all.add(mapLevel1);
+                    }
+
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+
         return all;
     }
 
@@ -70,7 +117,51 @@ public class DepartController {
             map.put("children", child);
             result.add(map);
 
-            getChild(0, child, status);
+            long pid = 0;
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal != null) {
+                try {
+                    if (principal instanceof LoginUserDetails) {
+                        LoginUserDetails user = (LoginUserDetails) principal;
+                        log.info("Got UserDetails object." + user.getUsername());
+                        UserEntity session = user.getUserSessionEntity();
+                        TbRole role = session.getRole();
+
+                        pid = session.getDepid();
+
+                        if (role != null) {
+                            String ext = role.getExt1();
+                            if (ext != null && ext.contains("系统查询")) {
+                                pid = 0;
+                            }
+                        }
+
+                        List childarray = new ArrayList();
+                        getChild(pid, childarray, status);
+
+                        TbDepartment department = session.getDepartment();
+                        if (department != null) {
+                            HashMap mapLevel1 = new HashMap();
+                            mapLevel1.put("id", department.getId());
+                            mapLevel1.put("text", department.getDepname());
+                            mapLevel1.put("desc", department.getDescms());
+                            mapLevel1.put("pid", department.getDepfather());
+                            mapLevel1.put("ext1", department.getExt1());
+                            if (childarray.size() > 0) {
+                                mapLevel1.put("children", childarray);
+                                if (status == 0) {
+                                    mapLevel1.put("state", "closed");
+                                }
+                            }
+
+                            child.add(mapLevel1);
+                        }
+
+                    }
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
