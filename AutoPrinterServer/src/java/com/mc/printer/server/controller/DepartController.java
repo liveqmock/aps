@@ -77,20 +77,24 @@ public class DepartController {
                     List childarray = new ArrayList();
                     getChild(pid, childarray, 0);
 
-                    TbDepartment department = session.getDepartment();
-                    if (department != null) {
-                        HashMap mapLevel1 = new HashMap();
-                        mapLevel1.put("id", department.getId());
-                        mapLevel1.put("text", department.getDepname());
-                        mapLevel1.put("desc", department.getDescms());
-                        mapLevel1.put("pid", department.getDepfather());
-                        mapLevel1.put("ext1", department.getExt1());
-                        if (childarray.size() > 0) {
-                            mapLevel1.put("children", childarray);
-                            mapLevel1.put("state", "closed");
-                        }
+                    if (pid == 0) {
+                        all = childarray;
+                    } else {
+                        TbDepartment department = session.getDepartment();
+                        if (department != null) {
+                            HashMap mapLevel1 = new HashMap();
+                            mapLevel1.put("id", department.getId());
+                            mapLevel1.put("text", department.getDepname());
+                            mapLevel1.put("desc", department.getDescms());
+                            mapLevel1.put("pid", department.getDepfather());
+                            mapLevel1.put("ext1", department.getExt1());
+                            if (childarray.size() > 0) {
+                                mapLevel1.put("children", childarray);
+                                mapLevel1.put("state", "closed");
+                            }
 
-                        all.add(mapLevel1);
+                            all.add(mapLevel1);
+                        }
                     }
 
                 }
@@ -139,24 +143,27 @@ public class DepartController {
                         List childarray = new ArrayList();
                         getChild(pid, childarray, status);
 
-                        TbDepartment department = session.getDepartment();
-                        if (department != null) {
-                            HashMap mapLevel1 = new HashMap();
-                            mapLevel1.put("id", department.getId());
-                            mapLevel1.put("text", department.getDepname());
-                            mapLevel1.put("desc", department.getDescms());
-                            mapLevel1.put("pid", department.getDepfather());
-                            mapLevel1.put("ext1", department.getExt1());
-                            if (childarray.size() > 0) {
-                                mapLevel1.put("children", childarray);
-                                if (status == 0) {
-                                    mapLevel1.put("state", "closed");
+                        if (pid == 0) {
+                            result = childarray;
+                        } else {
+                            TbDepartment department = session.getDepartment();
+                            if (department != null) {
+                                HashMap mapLevel1 = new HashMap();
+                                mapLevel1.put("id", department.getId());
+                                mapLevel1.put("text", department.getDepname());
+                                mapLevel1.put("desc", department.getDescms());
+                                mapLevel1.put("pid", department.getDepfather());
+                                mapLevel1.put("ext1", department.getExt1());
+                                if (childarray.size() > 0) {
+                                    mapLevel1.put("children", childarray);
+                                    if (status == 0) {
+                                        mapLevel1.put("state", "closed");
+                                    }
                                 }
+
+                                child.add(mapLevel1);
                             }
-
-                            child.add(mapLevel1);
                         }
-
                     }
                 } catch (Exception e) {
                     log.error(e);
