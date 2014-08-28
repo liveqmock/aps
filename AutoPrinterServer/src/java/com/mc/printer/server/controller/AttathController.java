@@ -140,7 +140,7 @@ public class AttathController {
 //                                                tbauth.setBranchname("");
                                                     tbauth.setButtonname(buttonName);
                                                     tbauth.setGuidename(guideName);
-                                                    controlService.saveControl(tbauth);
+                                                    controlService.saveControl(tbauth,k==0);
                                                     k++;
                                                 }
                                             }

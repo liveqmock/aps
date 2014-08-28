@@ -72,21 +72,23 @@ public class ControlService implements ControlServiceIF {
     }
 
     @Override
-    public int saveControl(TbControl tbauth) {
+    public int saveControl(TbControl tbauth, boolean deleteAllOldGuide) {
 
         if (tbauth != null) {
-            log.debug("try to find buttton and guide name whether they are existing.");
-            TbControl condition = new TbControl();
-            condition.setGuidename(tbauth.getGuidename());
-            CommFindEntity<TbControl> result = findControl(condition);
-            if (result.getCount() <= 0) {
+            log.debug("try to find buttton and guide name whether they are existing. delete old:" + deleteAllOldGuide);
+            if (deleteAllOldGuide) {
+                TbControl condition = new TbControl();
+                condition.setGuidename(tbauth.getGuidename());
+                CommFindEntity<TbControl> result = findControl(condition);
+                if (result.getCount() <= 0) {
 
-            } else {
-                log.debug("delete existing value");
-                List<TbControl> ls = result.getResult();
-                if (ls != null) {
-                    for (TbControl con : ls) {
-                        deleteControl(con.getId());
+                } else {
+                    log.debug("delete existing value");
+                    List<TbControl> ls = result.getResult();
+                    if (ls != null) {
+                        for (TbControl con : ls) {
+                            deleteControl(con.getId());
+                        }
                     }
                 }
             }

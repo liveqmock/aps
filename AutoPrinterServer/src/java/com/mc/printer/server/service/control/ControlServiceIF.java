@@ -18,8 +18,8 @@ public interface ControlServiceIF {
     
     public TbControl findObj(Long id);
     
-    public int saveControl(TbControl tbauth);
-    
+    public int saveControl(TbControl tbauth, boolean deleteAllOldGuide);
+   
     public int updateControl(TbControl tbauth);
     
     public int deleteControl(Long id);

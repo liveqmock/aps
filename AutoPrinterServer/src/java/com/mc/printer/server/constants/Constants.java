@@ -12,7 +12,7 @@ public class Constants {
 
     public static String CONFIG_JNDI = "jndiName";
 
-    public static String VERSION = "14.0718.03";
+    public static String VERSION = "14.0828.02";
 
     public final static int FLAG_STATUS_DELETE = 1;
 
